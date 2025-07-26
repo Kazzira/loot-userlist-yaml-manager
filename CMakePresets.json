@@ -93,6 +93,72 @@
       }
     },
     {
+      "name": "linux",
+      "hidden": true,
+      "cacheVariables": {
+        "VCPKG_MANIFEST_FEATURES": {
+          "type": "STRING",
+          "value": "tests"
+        },
+        "VCPKG_TARGET_TRIPLET": {
+          "type": "STRING",
+          "value": "x64-linux"
+        }
+      }
+    },
+    {
+      "name": "gcc",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_CXX_FLAGS": {
+          "type": "STRING",
+          "value": "-pedantic -pedantic-errors -Wall -Werror -Wextra -Wnrvo -Wconversion --std=c++23"
+        },
+        "CMAKE_CXX_FLAGS_RELEASE": {
+          "type": "STRING",
+          "value": "-O3"
+        },
+        "CMAKE_EXPORT_COMPILE_COMMANDS": {
+          "type": "BOOL",
+          "value": "ON"
+        },
+        "CMAKE_C_COMPILER": {
+          "type": "STRING",
+          "value": "/usr/bin/gcc"
+        },
+        "CMAKE_CXX_COMPILER": {
+          "type": "STRING",
+          "value": "/usr/bin/g++-14"
+        }
+      }
+    },
+    {
+      "name": "gcc-debug",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_CXX_FLAGS": {
+          "type": "STRING",
+          "value": "-g -fno-sanitize-recover=undefined -fsanitize=address,undefined -pedantic -pedantic-errors -Wall -Werror -Wextra -Wconversion --coverage -std=c++23"
+        },
+        "CMAKE_EXE_LINKER_FLAGS": {
+          "type": "STRING",
+          "value": "-fno-sanitize-recover=undefined -fsanitize=address,undefined --coverage"
+        },
+        "CMAKE_EXPORT_COMPILE_COMMANDS": {
+          "type": "BOOL",
+          "value": "ON"
+        },
+        "CMAKE_C_COMPILER": {
+          "type": "STRING",
+          "value": "/usr/bin/gcc"
+        },
+        "CMAKE_CXX_COMPILER": {
+          "type": "STRING",
+          "value": "/usr/bin/g++"
+        }
+      }
+    },
+    {
       "name": "windows-msvc-vcpkg-debug", "inherits": [
         "cmake-dev",
         "debug",
@@ -109,6 +175,26 @@
         "msvc",
         "vcpkg",
         "windows"
+      ]
+    },
+    {
+      "name": "linux-gcc-vcpkg-debug",
+      "inherits": [
+        "cmake-dev",
+        "debug",
+        "gcc-debug",
+        "linux",
+        "vcpkg"
+      ]
+    },
+    {
+      "name": "linux-gcc-vcpkg-release",
+      "inherits": [
+        "cmake-dev",
+        "release",
+        "gcc",
+        "linux",
+        "vcpkg"
       ]
     }
   ],
