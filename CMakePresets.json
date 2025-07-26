@@ -1,0 +1,129 @@
+{
+  "version": 5,
+  "configurePresets": [
+    {
+      "name": "cmake-dev",
+      "hidden": true,
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "installDir": "${sourceDir}/install/${presetName}",
+      "generator": "Ninja",
+      "cacheVariables": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      },
+      "architecture": {
+          "value": "x64",
+          "strategy": "external"
+      },
+      "warnings": {
+        "deprecated": true,
+        "dev": true
+      },
+      "errors": {
+        "deprecated": true
+      }
+    },
+    {
+      "name": "debug",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": {
+          "type": "STRING",
+          "value": "Debug"
+        }
+      }
+    },
+    {
+      "name": "release",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": {
+          "type": "STRING",
+          "value": "Release"
+        }
+      }
+    },
+    {
+      "name": "vcpkg",
+      "hidden": true,
+      "toolchainFile": "$env{VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake"
+    },
+    {
+      "name": "windows",
+      "hidden": true,
+      "cacheVariables": {
+        "VCPKG_MANIFEST_FEATURES": {
+          "type": "STRING",
+          "value": "tests"
+        },
+        "VCPKG_TARGET_TRIPLET": {
+          "type": "STRING",
+          "value": "x64-windows-static"
+        }
+      }
+    },
+    {
+      "name": "msvc",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_CXX_FLAGS": {
+          "type": "string",
+          "value": "/EHsc /MP /W4 /WX /external:anglebrackets /external:W0 /std:c++latest"
+        },
+        "CMAKE_CXX_FLAGS_RELEASE": {
+          "type": "STRING",
+          "value": "/Ox /Ob3"
+        },
+        "CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS": {
+          "type": "BOOLEAN",
+          "value": "ON"
+        },
+        "CMAKE_EXE_LINKER_FLAGS": {
+          "type": "STRING",
+          "value": "/MD"
+        },
+        "CMAKE_EXE_LINKER_FLAGS_RELEASE": {
+          "type": "STRING",
+          "value": "/DEBUG:FASTLINK"
+        },
+        "CMAKE_MSVC_RUNTIME_LIBRARY": {
+          "type": "STRING",
+          "value": "MultiThreaded$<$<CONFIG:Debug>:Debug>"
+
+        }
+      }
+    },
+    {
+      "name": "windows-msvc-vcpkg-debug", "inherits": [
+        "cmake-dev",
+        "debug",
+        "msvc",
+        "vcpkg",
+        "windows"
+      ]
+    },
+    {
+      "name": "windows-msvc-vcpkg-release",
+      "inherits": [
+        "cmake-dev",
+        "release",
+        "msvc",
+        "vcpkg",
+        "windows"
+      ]
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "release-msvc",
+      "displayName": "Release (MSVC)",
+      "configurePreset": "windows-msvc-vcpkg-release",
+      "description": "Builds the project using MSVC in release mode with vcpkg."
+    },
+    {
+      "name": "debug-msvc",
+      "displayName": "Debug (MSVC)",
+      "configurePreset": "windows-msvc-vcpkg-debug",
+      "description": "Builds the project using MSVC in debug mode with vcpkg."
+    }
+  ]
+}
