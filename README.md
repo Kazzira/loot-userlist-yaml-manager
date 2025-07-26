@@ -1,0 +1,1 @@
+# loot-userlist-yaml-manager
