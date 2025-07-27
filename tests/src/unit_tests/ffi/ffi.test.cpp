@@ -32,7 +32,8 @@ TEST_CASE(
     "[ffi][ffi_construction]"
 )
 {
-    luyamlman_tests::ffi::s_ffi_wrapper wrapper("no_load_order.txt", "no_config.json");
-    REQUIRE(!wrapper);
-    REQUIRE(wrapper.construction_return_code() == LUYAMLMAN_OK());
+    luyamlman_tests::ffi::s_ffi_wrapper
+        wrapper( "no_load_order.txt", "no_config.json" );
+    REQUIRE( wrapper );
+    REQUIRE( wrapper.construction_return_code() == LUYAMLMAN_OK() );
 }

@@ -27,39 +27,54 @@ along with LOOT Userlist.yaml Manager.  If not, see
 //////////////////////////////////////////////////////////////////////////////
 #include "loot_userlist_yaml_manager_ffi.h"
 
-uint32_t LUYAMLMAN_OK()
+namespace {
+
+class s_loot_userlist_yaml_manager_handle
+{
+};
+
+} // namespace
+
+uint32_t
+LUYAMLMAN_OK()
 {
     return 1;
 }
 
-uint32_t LUYAMLMAN_ERR_ALLOCATION_FAILED()
+uint32_t
+LUYAMLMAN_ERR_ALLOCATION_FAILED()
 {
     return 2;
 }
 
 // Errors that can occur when creating the handle.
 
-uint32_t LUYAMLMAN_ERR_LOAD_ORDER_FILE_NOT_FOUND()
+uint32_t
+LUYAMLMAN_ERR_LOAD_ORDER_FILE_NOT_FOUND()
 {
     return 3;
 }
 
-uint32_t LUYAMLMAN_ERR_LOAD_ORDER_FILE_INVALID()
+uint32_t
+LUYAMLMAN_ERR_LOAD_ORDER_FILE_INVALID()
 {
     return 4;
 }
 
-uint32_t LUYAMLMAN_ERR_CONFIG_JSON_FILE_NOT_FOUND()
+uint32_t
+LUYAMLMAN_ERR_CONFIG_JSON_FILE_NOT_FOUND()
 {
     return 5;
 }
 
-uint32_t LUYAMLMAN_ERR_CONFIG_JSON_FILE_INVALID()
+uint32_t
+LUYAMLMAN_ERR_CONFIG_JSON_FILE_INVALID()
 {
     return 6;
 }
 
-uint32_t LUYAMLMAN_ERR_USERLIST_ERROR_JSON_INCLUDED()
+uint32_t
+LUYAMLMAN_ERR_USERLIST_ERROR_JSON_INCLUDED()
 {
     return 7;
 }
@@ -72,19 +87,22 @@ loot_userlist_yaml_manager_create_handle(
     [[maybe_unused]] char** a_userlist_error_json_contents
 )
 {
+    *a_handle = new s_loot_userlist_yaml_manager_handle();
     return LUYAMLMAN_OK();
 }
 
 void
 loot_userlist_yaml_manager_destroy_handle(
-    [[maybe_unused]] loot_userlist_yaml_manager_handle handle
+    loot_userlist_yaml_manager_handle a_handle
 )
 {
+    delete static_cast<s_loot_userlist_yaml_manager_handle*>( a_handle );
 }
 
 void
 loot_userlist_yaml_manager_destroy_error_json_contents(
-    [[maybe_unused]] char* error_json_contents
+    [[maybe_unused]] char* a_error_json_contents
 )
 {
+    delete[] a_error_json_contents;
 }
