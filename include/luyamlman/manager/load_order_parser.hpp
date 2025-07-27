@@ -33,6 +33,6 @@ along with LOOT Userlist.yaml Manager.  If not, see
 namespace luyamlman::manager {
 
 result<std::vector<std::string>>
-parse_load_order_file( std::string_view a_load_order_file_path ) noexcept;
+parse_load_order_file( std::string_view a_load_order_file_path );
 
 }
