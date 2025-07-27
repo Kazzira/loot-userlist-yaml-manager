@@ -42,3 +42,19 @@ target_link_libraries(
     LootUserListYAMLManagerFFI
     Catch2::Catch2WithMain
 )
+
+include(CTest)
+include(Catch)
+catch_discover_tests(luyamlman-tests)
+
+add_custom_command(
+  OUTPUT _run-luyamlman-tests-completed
+  COMMAND ${CMAKE_CTEST_COMMAND} -C $<CONFIGURATION> --output-on-failure
+  COMMAND cmake -E touch _run-luyamlman-tests-completed
+  DEPENDS luyamlman-tests luyamlman LootUserListYAMLManagerFFI
+)
+
+add_custom_target(run-luyamlman-tests ALL
+  DEPENDS _run-luyamlman-tests-completed
+)
+
