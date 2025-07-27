@@ -36,7 +36,7 @@ namespace luyamlman::manager {
 
 result<std::vector<std::string>>
 parse_load_order_file(
-    [[maybe_unused]] std::string_view a_load_order_file_path
+    std::string_view a_load_order_file_path
 )
 {
     using luyamlman::error::s_error;
