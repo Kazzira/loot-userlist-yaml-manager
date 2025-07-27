@@ -27,15 +27,42 @@ along with LOOT Userlist.yaml Manager.  If not, see
 //////////////////////////////////////////////////////////////////////////////
 #include "loot_userlist_yaml_manager_ffi.h"
 
-const uint32_t LUYAMLMAN_OK                               = 1;
+uint32_t LUYAMLMAN_OK()
+{
+    return 1;
+}
 
-const uint32_t LUYAMLMAN_ERR_ALLOCATION_FAILED            = 2;
+uint32_t LUYAMLMAN_ERR_ALLOCATION_FAILED()
+{
+    return 2;
+}
 
-const uint32_t LUYAMLMAN_ERR_LOAD_ORDER_FILE_NOT_FOUND    = 3;
-const uint32_t LUYAMLMAN_ERR_LOAD_ORDER_FILE_INVALID      = 4;
-const uint32_t LUYAMLMAN_ERR_CONFIG_JSON_FILE_NOT_FOUND   = 5;
-const uint32_t LUYAMLMAN_ERR_CONFIG_JSON_FILE_INVALID     = 6;
-const uint32_t LUYAMLMAN_ERR_USERLIST_ERROR_JSON_INCLUDED = 7;
+// Errors that can occur when creating the handle.
+
+uint32_t LUYAMLMAN_ERR_LOAD_ORDER_FILE_NOT_FOUND()
+{
+    return 3;
+}
+
+uint32_t LUYAMLMAN_ERR_LOAD_ORDER_FILE_INVALID()
+{
+    return 4;
+}
+
+uint32_t LUYAMLMAN_ERR_CONFIG_JSON_FILE_NOT_FOUND()
+{
+    return 5;
+}
+
+uint32_t LUYAMLMAN_ERR_CONFIG_JSON_FILE_INVALID()
+{
+    return 6;
+}
+
+uint32_t LUYAMLMAN_ERR_USERLIST_ERROR_JSON_INCLUDED()
+{
+    return 7;
+}
 
 uint32_t
 loot_userlist_yaml_manager_create_handle(
@@ -45,7 +72,7 @@ loot_userlist_yaml_manager_create_handle(
     [[maybe_unused]] char** a_userlist_error_json_contents
 )
 {
-    return LUYAMLMAN_OK;
+    return LUYAMLMAN_OK();
 }
 
 void

@@ -32,16 +32,16 @@ extern "C"
 
     typedef void*         loot_userlist_yaml_manager_handle;
 
-    extern const uint32_t LUYAMLMAN_OK;
+    uint32_t LUYAMLMAN_OK();
 
-    extern const uint32_t LUYAMLMAN_ERR_ALLOCATION_FAILED;
+    uint32_t LUYAMLMAN_ERR_ALLOCATION_FAILED();
 
     // Errors that can occur when creating the handle.
-    extern const uint32_t LUYAMLMAN_ERR_LOAD_ORDER_FILE_NOT_FOUND;
-    extern const uint32_t LUYAMLMAN_ERR_LOAD_ORDER_FILE_INVALID;
-    extern const uint32_t LUYAMLMAN_ERR_CONFIG_JSON_FILE_NOT_FOUND;
-    extern const uint32_t LUYAMLMAN_ERR_CONFIG_JSON_FILE_INVALID;
-    extern const uint32_t LUYAMLMAN_ERR_USERLIST_ERROR_JSON_INCLUDED;
+    uint32_t LUYAMLMAN_ERR_LOAD_ORDER_FILE_NOT_FOUND();
+    uint32_t LUYAMLMAN_ERR_LOAD_ORDER_FILE_INVALID();
+    uint32_t LUYAMLMAN_ERR_CONFIG_JSON_FILE_NOT_FOUND();
+    uint32_t LUYAMLMAN_ERR_CONFIG_JSON_FILE_INVALID();
+    uint32_t LUYAMLMAN_ERR_USERLIST_ERROR_JSON_INCLUDED();
 
     uint32_t
     loot_userlist_yaml_manager_create_handle(
