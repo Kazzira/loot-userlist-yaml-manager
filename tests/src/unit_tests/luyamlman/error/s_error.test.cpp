@@ -36,7 +36,7 @@ TEST_CASE(
 )
 {
     luyamlman::error::s_error error_instance(
-        luyamlman::error_details_types::t_allocation_failure{}
+        luyamlman::error_details_types::s_allocation_failure{}
     );
 
     REQUIRE_NOTHROW( error_instance.consolidate_errors() );

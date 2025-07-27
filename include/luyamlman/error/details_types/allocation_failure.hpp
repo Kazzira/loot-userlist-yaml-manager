@@ -21,7 +21,7 @@ along with LOOT Userlist.yaml Manager.  If not, see
 
 namespace luyamlman::error_details_types {
 
-struct t_allocation_failure
+struct s_allocation_failure
 {
 };
 

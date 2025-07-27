@@ -37,6 +37,6 @@ namespace luyamlman::error {
  * error handling.
  */
 using v_error_details
-    = std::variant<luyamlman::error_details_types::t_allocation_failure>;
+    = std::variant<luyamlman::error_details_types::s_allocation_failure>;
 
 } // namespace luyamlman::error
