@@ -2,6 +2,7 @@ add_library(
     luyamlman
     STATIC
     "${ROOT_DIR}/src/error/s_error.cpp"
+    "${ROOT_DIR}/src/manager/load_order_parser.cpp"
 )
 
 add_dependencies(

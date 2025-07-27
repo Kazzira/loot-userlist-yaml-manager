@@ -3,6 +3,7 @@ add_executable(
     "${ROOT_DIR}/tests/src/luyamlman_tests/ffi/ffi_wrapper.cpp"
 
     "${ROOT_DIR}/tests/src/unit_tests/luyamlman/error/s_error.test.cpp"
+    "${ROOT_DIR}/tests/src/unit_tests/luyamlman/manager/load_order_parser.test.cpp"
 
     "${ROOT_DIR}/tests/src/unit_tests/ffi/ffi.test.cpp"
 )
