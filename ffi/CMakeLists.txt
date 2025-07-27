@@ -11,3 +11,9 @@ target_include_directories(
     PUBLIC
     "${ROOT_DIR}/ffi/include"
 )
+
+target_link_libraries(
+    LootUserListYAMLManagerFFI
+    PUBLIC
+    luyamlman
+)
