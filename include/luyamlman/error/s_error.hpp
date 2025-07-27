@@ -22,6 +22,7 @@ along with LOOT Userlist.yaml Manager.  If not, see
 // STANDARD LIBRARY INCLUDES
 //////////////////////////////////////////////////////////////////////////////
 #include <cstddef>
+#include <expected>
 #include <list>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -133,3 +134,10 @@ class s_error
         std::list<s_error>                m_additional_errors;
 };
 } // namespace luyamlman::error
+
+namespace luyamlman {
+
+template <typename T>
+using result = std::expected<T, luyamlman::error::s_error>;
+
+}
