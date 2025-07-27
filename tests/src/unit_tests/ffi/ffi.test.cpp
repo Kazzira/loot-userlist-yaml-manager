@@ -34,6 +34,9 @@ TEST_CASE(
 {
     luyamlman_tests::ffi::s_ffi_wrapper
         wrapper( "no_load_order.txt", "no_config.json" );
-    REQUIRE( wrapper );
-    REQUIRE( wrapper.construction_return_code() == LUYAMLMAN_OK() );
+    REQUIRE( !wrapper );
+    REQUIRE(
+        wrapper.construction_return_code()
+        == LUYAMLMAN_ERR_LOAD_ORDER_FILE_NOT_FOUND()
+    );
 }

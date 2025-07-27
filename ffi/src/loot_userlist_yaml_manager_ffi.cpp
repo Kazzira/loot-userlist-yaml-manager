@@ -27,10 +27,17 @@ along with LOOT Userlist.yaml Manager.  If not, see
 //////////////////////////////////////////////////////////////////////////////
 #include "loot_userlist_yaml_manager_ffi.h"
 
+//////////////////////////////////////////////////////////////////////////////
+// PROJECT INCLUDES
+//////////////////////////////////////////////////////////////////////////////
+#include "luyamlman/manager/load_order_parser.hpp"
+
 namespace {
 
 class s_loot_userlist_yaml_manager_handle
 {
+    public:
+        std::vector<std::string> m_load_order;
 };
 
 } // namespace
@@ -87,7 +94,28 @@ loot_userlist_yaml_manager_create_handle(
     [[maybe_unused]] char** a_userlist_error_json_contents
 )
 {
-    *a_handle = new s_loot_userlist_yaml_manager_handle();
+    try
+    {
+        auto load_order
+            = luyamlman::manager::parse_load_order_file( a_load_order_file_path
+            );
+
+        if( !load_order )
+        {
+            return LUYAMLMAN_ERR_LOAD_ORDER_FILE_NOT_FOUND();
+        }
+
+        *a_handle = new s_loot_userlist_yaml_manager_handle();
+
+        static_cast<s_loot_userlist_yaml_manager_handle*>( *a_handle )
+            ->m_load_order
+            = std::move( *load_order );
+    }
+    catch( const std::bad_alloc& )
+    {
+        return LUYAMLMAN_ERR_ALLOCATION_FAILED();
+    }
+
     return LUYAMLMAN_OK();
 }
 

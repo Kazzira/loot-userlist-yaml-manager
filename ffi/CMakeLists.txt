@@ -12,6 +12,11 @@ target_include_directories(
     "${ROOT_DIR}/ffi/include"
 )
 
+target_include_directories(
+    LootUserListYAMLManagerFFI
+    PRIVATE
+    "${ROOT_DIR}/include"
+)
 target_link_libraries(
     LootUserListYAMLManagerFFI
     PUBLIC

@@ -112,7 +112,7 @@
       "cacheVariables": {
         "CMAKE_CXX_FLAGS": {
           "type": "STRING",
-          "value": "-pedantic -pedantic-errors -Wall -Werror -Wextra -Wnrvo -Wconversion --std=c++23"
+          "value": "-pedantic -pedantic-errors -Wall -Werror -Wextra -Wconversion --std=c++23 -Wnrvo -fPIC"
         },
         "CMAKE_CXX_FLAGS_RELEASE": {
           "type": "STRING",
@@ -138,7 +138,7 @@
       "cacheVariables": {
         "CMAKE_CXX_FLAGS": {
           "type": "STRING",
-          "value": "-g -fno-sanitize-recover=undefined -fsanitize=address,undefined -pedantic -pedantic-errors -Wall -Werror -Wextra -Wconversion --coverage -std=c++23"
+          "value": "-g -fno-sanitize-recover=undefined -fsanitize=address,undefined -pedantic -pedantic-errors -Wall -Werror -Wextra -Wconversion --coverage -std=c++23 -fPIC"
         },
         "CMAKE_EXE_LINKER_FLAGS": {
           "type": "STRING",
