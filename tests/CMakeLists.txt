@@ -8,6 +8,8 @@ add_executable(
     "${ROOT_DIR}/tests/src/unit_tests/ffi/ffi.test.cpp"
 )
 
+add_compile_definitions(TEST_DATA_DIR="${ROOT_DIR}/tests/data")
+
 add_custom_command(
     TARGET luyamlman-tests
     POST_BUILD 

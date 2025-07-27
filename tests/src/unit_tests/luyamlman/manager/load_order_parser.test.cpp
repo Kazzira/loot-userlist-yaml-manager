@@ -32,5 +32,16 @@ TEST_CASE(
     "[luyamlman][manager][load_order_parser]"
 )
 {
-    REQUIRE( true );
+    auto load_order_file_path
+        = std::filesystem::path( TEST_DATA_DIR ) / "load_order1.txt";
+
+    auto load_order_file_path_str = load_order_file_path.string();
+
+    auto result
+        = luyamlman::manager::parse_load_order_file( load_order_file_path_str );
+
+    REQUIRE( result );
+    REQUIRE( result->size() == 2 );
+    REQUIRE( result->at( 0 ) == "Skyrim.esm" );
+    REQUIRE( result->at( 1 ) == "Update.esm" );
 }
