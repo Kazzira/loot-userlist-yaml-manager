@@ -21,17 +21,25 @@ along with LOOT Userlist.yaml Manager.  If not, see
 //////////////////////////////////////////////////////////////////////////////
 // STANDARD LIBRARY INCLUDES
 //////////////////////////////////////////////////////////////////////////////
+#include <cstddef>
 #include <list>
 
 //////////////////////////////////////////////////////////////////////////////
 // PROJECT INCLUDES
 //////////////////////////////////////////////////////////////////////////////
-#include "luyamlman/error/error_details_types.hpp"
+#include "luyamlman/error/v_error_details.hpp"
 
 namespace luyamlman::error {
 
 class s_error
 {
+    public:
+        using iterator         = std::list<s_error>::iterator;
+        using const_iterator   = std::list<s_error>::const_iterator;
+        using reverse_iterator = std::list<s_error>::reverse_iterator;
+        using const_reverse_iterator
+            = std::list<s_error>::const_reverse_iterator;
+
     public:
         s_error(
             luyamlman::error::v_error_details a_details
@@ -41,12 +49,67 @@ class s_error
         }
 
     public:
-        luyamlman::error::v_error_details&
-        details()
+        iterator
+        begin()
         {
-            return m_details;
+            return m_additional_errors.begin();
         }
 
+        const_iterator
+        begin() const
+        {
+            return m_additional_errors.begin();
+        }
+
+        iterator
+        end()
+        {
+            return m_additional_errors.end();
+        }
+
+        const_iterator
+        end() const
+        {
+            return m_additional_errors.end();
+        }
+
+        reverse_iterator
+        rbegin()
+        {
+            return m_additional_errors.rbegin();
+        }
+
+        const_reverse_iterator
+        rbegin() const
+        {
+            return m_additional_errors.rbegin();
+        }
+
+        reverse_iterator
+        rend()
+        {
+            return m_additional_errors.rend();
+        }
+
+        const_reverse_iterator
+        rend() const
+        {
+            return m_additional_errors.rend();
+        }
+
+        bool
+        empty() const
+        {
+            return m_additional_errors.empty();
+        }
+
+        size_t
+        size() const
+        {
+            return m_additional_errors.size() + 1;
+        }
+
+    public:
         const luyamlman::error::v_error_details&
         details() const
         {

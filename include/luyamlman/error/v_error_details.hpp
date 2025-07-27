@@ -26,7 +26,8 @@ along with LOOT Userlist.yaml Manager.  If not, see
 //////////////////////////////////////////////////////////////////////////////
 // PROJECT INCLUDES
 //////////////////////////////////////////////////////////////////////////////
-#include "luyamlman/error/details_types/allocation_failure.hpp"
+#include "luyamlman/error/details_types/s_allocation_failure.hpp"
+#include "luyamlman/error/details_types/s_filesystem_error.hpp"
 
 namespace luyamlman::error {
 
@@ -36,7 +37,8 @@ namespace luyamlman::error {
  * This variant can hold different types of error details, allowing for flexible
  * error handling.
  */
-using v_error_details
-    = std::variant<luyamlman::error_details_types::s_allocation_failure>;
+using v_error_details = std::variant<
+    luyamlman::error_details_types::s_allocation_failure,
+    luyamlman::error_details_types::s_filesystem_error>;
 
 } // namespace luyamlman::error
