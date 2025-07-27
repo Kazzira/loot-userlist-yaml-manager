@@ -21,7 +21,7 @@ along with LOOT Userlist.yaml Manager.  If not, see
 //////////////////////////////////////////////////////////////////////////////
 // STANDARD LIBRARY INCLUDES
 //////////////////////////////////////////////////////////////////////////////
-#include <vector>
+#include <list>
 
 //////////////////////////////////////////////////////////////////////////////
 // PROJECT INCLUDES
@@ -67,6 +67,6 @@ class s_error
 
     private:
         luyamlman::error::v_error_details m_details;
-        std::vector<s_error>              m_additional_errors;
+        std::list<s_error>                m_additional_errors;
 };
 } // namespace luyamlman::error

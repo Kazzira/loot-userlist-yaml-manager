@@ -31,6 +31,21 @@ namespace luyamlman::error {
 void
 s_error::consolidate_errors()
 {
+    for( auto& error : m_additional_errors )
+    {
+        if( error.m_additional_errors.empty() )
+        {
+            continue;
+        }
+
+        error.consolidate_errors();
+
+        //
+        // Will need to test to make sure that iterators work correctly here.
+        //
+        m_additional_errors
+            .splice( m_additional_errors.end(), error.m_additional_errors );
+    }
 }
 
 } // namespace luyamlman::error
