@@ -2,7 +2,9 @@
   "name": "loot-userlist-yaml-manager",
   "version-string": "1",
   "dependencies": [
-    "strong-type"
+    "strong-type",
+    "yaml-cpp",
+    "nlohmann-json"
   ],
   "default-features": [
     "tests"
