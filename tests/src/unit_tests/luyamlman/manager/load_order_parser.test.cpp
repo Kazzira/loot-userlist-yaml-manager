@@ -21,11 +21,14 @@ along with LOOT Userlist.yaml Manager.  If not, see
 // THIRD PARTY INCLUDES
 /////////////////////////////////////////////////////////////////////////////
 #include <catch2/catch_all.hpp>
+#include <iterator>
 
 /////////////////////////////////////////////////////////////////////////////
 // PROJECT INCLUDES
 /////////////////////////////////////////////////////////////////////////////
+#include "luyamlman/error/details_types/s_load_order_read_error.hpp"
 #include "luyamlman/manager/load_order_parser.hpp"
+#include "luyamlman/overloads.hpp"
 
 TEST_CASE(
     "luyamlman:manager: Test parsing a load order file",
@@ -44,4 +47,114 @@ TEST_CASE(
     REQUIRE( result->size() == 2 );
     REQUIRE( result->at( 0 ) == "Skyrim.esm" );
     REQUIRE( result->at( 1 ) == "Update.esm" );
+}
+
+TEST_CASE(
+    "luyamlman:manager: Test parsing a load order file with duplicates",
+    "[luyamlman][manager][load_order_parser]"
+)
+{
+    using luyamlman::error_details_types::s_load_order_read_error;
+
+    auto load_order_file_path
+        = std::filesystem::path( TEST_DATA_DIR ) / "load_order2.txt";
+    auto load_order_file_path_str = load_order_file_path.string();
+    auto result
+        = luyamlman::manager::parse_load_order_file( load_order_file_path_str );
+
+    REQUIRE( !result );
+
+    // Only one error.
+    CHECK( result.error().size() == 1 );
+
+    // Make sure the details is correct.
+    REQUIRE_NOTHROW(
+        std::get<luyamlman::error_details_types::s_load_order_read_error>(
+            result.error().details()
+        )
+    );
+
+    auto& error_details
+        = std::get<luyamlman::error_details_types::s_load_order_read_error>(
+            result.error().details()
+        );
+
+    CHECK(
+        error_details.m_code
+        == s_load_order_read_error::e_code::duplicate_plugin
+    );
+    CHECK( error_details.m_line_number == 7 );
+    CHECK( error_details.m_plugin_name == "Plugin3.esp" );
+}
+
+TEST_CASE(
+    "luyamlman:manager: Parse load order with multiple duplicates",
+    "[luyamlman][manager][load_order_parser]"
+)
+{
+    using luyamlman::error_details_types::s_load_order_read_error;
+
+    auto load_order_file_path
+        = std::filesystem::path( TEST_DATA_DIR ) / "load_order3.txt";
+    auto load_order_file_path_str = load_order_file_path.string();
+    auto result
+        = luyamlman::manager::parse_load_order_file( load_order_file_path_str );
+
+    REQUIRE( !result );
+
+    // Multiple errors.
+    CHECK( result.error().size() == 3 );
+
+    auto perform_assertions = []( const luyamlman::error::s_error& a_error,
+                                  uint32_t                        a_line_number,
+                                  std::string_view                a_plugin_name,
+                                  s_load_order_read_error::e_code a_code )
+    {
+        std::visit(
+            luyamlman::overloads{
+                []( const luyamlman::error_details_types::
+                        s_allocation_failure& )
+                {
+                    FAIL( "Unexpected allocation failure error." );
+                },
+                []( const luyamlman::error_details_types::s_filesystem_error& )
+                {
+                    FAIL( "Unexpected filesystem error." );
+                },
+                [&]( const luyamlman::error_details_types::
+                         s_load_order_read_error& error_details )
+                {
+                    CHECK( error_details.m_code == a_code );
+                    CHECK( error_details.m_line_number == a_line_number );
+                    CHECK( error_details.m_plugin_name == a_plugin_name );
+                }
+            },
+            a_error.details()
+        );
+    };
+
+    perform_assertions(
+        result.error(),
+        8,
+        "Funtimes420.esp",
+        s_load_order_read_error::e_code::duplicate_plugin
+    );
+
+    auto it = result.error().begin();
+
+    perform_assertions(
+        *it,
+        10,
+        "HalfLife3.esm",
+        s_load_order_read_error::e_code::duplicate_plugin
+    );
+
+    ++it;
+
+    perform_assertions(
+        *it,
+        11,
+        "Funtimes420.esp",
+        s_load_order_read_error::e_code::duplicate_plugin
+    );
 }

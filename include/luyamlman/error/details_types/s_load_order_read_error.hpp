@@ -21,26 +21,22 @@ along with LOOT Userlist.yaml Manager.  If not, see
 //////////////////////////////////////////////////////////////////////////////
 // STANDARD LIBRARY INCLUDES
 //////////////////////////////////////////////////////////////////////////////
-#include <variant>
+#include <cstdint>
 
-//////////////////////////////////////////////////////////////////////////////
-// PROJECT INCLUDES
-//////////////////////////////////////////////////////////////////////////////
-#include "luyamlman/error/details_types/s_allocation_failure.hpp"
-#include "luyamlman/error/details_types/s_filesystem_error.hpp"
-#include "luyamlman/error/details_types/s_load_order_read_error.hpp"
+#include <string>
 
-namespace luyamlman::error {
+namespace luyamlman::error_details_types {
 
-/**
- * @brief Variant type for error details in the LOOT Userlist.yaml Manager.
- *
- * This variant can hold different types of error details, allowing for flexible
- * error handling.
- */
-using v_error_details = std::variant<
-    luyamlman::error_details_types::s_allocation_failure,
-    luyamlman::error_details_types::s_filesystem_error,
-    luyamlman::error_details_types::s_load_order_read_error>;
+struct s_load_order_read_error
+{
+        enum class e_code : uint32_t
+        {
+            duplicate_plugin
+        };
 
-} // namespace luyamlman::error
+        e_code      m_code;
+        uint32_t    m_line_number;
+        std::string m_plugin_name;
+};
+
+} // namespace luyamlman::error_details_types

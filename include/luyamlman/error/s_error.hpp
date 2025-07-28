@@ -123,7 +123,7 @@ class s_error
 
         void
         insert_additional_error(
-            s_error& a_error
+            s_error a_error
         )
         {
             m_additional_errors.push_back( std::move( a_error ) );

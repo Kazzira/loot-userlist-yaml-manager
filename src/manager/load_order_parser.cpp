@@ -21,6 +21,7 @@ along with LOOT Userlist.yaml Manager.  If not, see
 // STANDARD LIBRARY INCLUDES
 //////////////////////////////////////////////////////////////////////////////
 #include <fstream>
+#include <set>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -30,6 +31,7 @@ along with LOOT Userlist.yaml Manager.  If not, see
 //////////////////////////////////////////////////////////////////////////////
 #include "luyamlman/error/details_types/s_allocation_failure.hpp"
 #include "luyamlman/error/details_types/s_filesystem_error.hpp"
+#include "luyamlman/error/details_types/s_load_order_read_error.hpp"
 #include "luyamlman/error/s_error.hpp"
 
 namespace luyamlman::manager {
@@ -42,21 +44,29 @@ parse_load_order_file(
     using luyamlman::error::s_error;
     using luyamlman::error_details_types::s_allocation_failure;
     using luyamlman::error_details_types::s_filesystem_error;
+    using luyamlman::error_details_types::s_load_order_read_error;
 
-    std::vector<std::string> load_order;
-    std::ifstream            load_order_file( a_load_order_file_path.data() );
+    result<std::vector<std::string>> parse_result{};
+    bool                             error_occurred = false;
+    std::set<std::string>            unique_plugins;
+    std::ifstream load_order_file( a_load_order_file_path.data() );
 
     if( !load_order_file.is_open() )
     {
-        return std::unexpected(
+        parse_result = std::unexpected(
             s_error( s_filesystem_error{ a_load_order_file_path } )
         );
+
+        return parse_result;
     }
 
     std::string line;
+    uint32_t    line_number = 0;
 
     while( std::getline( load_order_file, line ) )
     {
+        ++line_number;
+
         if( line.empty() || line[0] == '#' )
         {
             continue; // Skip empty lines and comments.
@@ -66,14 +76,58 @@ parse_load_order_file(
         line.erase( 0, line.find_first_not_of( " \t" ) );
         line.erase( line.find_last_not_of( " \t" ) + 1 );
 
-        if( !line.empty() )
+        if( line.empty() )
         {
-            // Add the valid line to the load order.
-            load_order.push_back( std::move( line ) );
+            continue;
         }
+
+        // Check for duplicate plugins.
+        if( unique_plugins.find( line ) != unique_plugins.end() )
+        {
+            if( !error_occurred )
+            {
+                error_occurred = true;
+                parse_result
+                    = std::unexpected( s_error( s_load_order_read_error{
+                        .m_code
+                        = s_load_order_read_error::e_code::duplicate_plugin,
+                        .m_line_number = line_number,
+                        .m_plugin_name = line
+                    } ) );
+            }
+            else
+            {
+                parse_result.error().insert_additional_error(
+                    s_error( s_load_order_read_error{
+                        .m_code
+                        = s_load_order_read_error::e_code::duplicate_plugin,
+                        .m_line_number = line_number,
+                        .m_plugin_name = line
+                    } )
+                );
+            }
+        }
+
+        if( error_occurred )
+        {
+            unique_plugins.insert( std::move( line ) );
+            // If an error has already occurred, we can skip further processing.
+            continue;
+        }
+
+        unique_plugins.insert( line );
+        // Add the valid line to the load order.
+        parse_result->push_back( std::move( line ) );
     }
 
-    return load_order;
+    // Consolidate errors if any occurred.
+    // Although it might not be necessary in this function.
+    if( error_occurred )
+    {
+        parse_result.error().consolidate_errors();
+    }
+
+    return parse_result;
 }
 
 } // namespace luyamlman::manager

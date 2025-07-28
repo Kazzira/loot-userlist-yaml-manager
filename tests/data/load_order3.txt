@@ -1,0 +1,11 @@
+# Multiple duplicates
+
+Skyrim.esm
+Update.esm
+Funtimes420.esp
+HalfLife3.esm
+ZachRules.esp
+Funtimes420.esp
+Blah.esp
+HalfLife3.esm
+Funtimes420.esp
