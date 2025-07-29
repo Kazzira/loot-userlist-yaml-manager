@@ -21,9 +21,11 @@ along with LOOT Userlist.yaml Manager.  If not, see
 //////////////////////////////////////////////////////////////////////////////
 // STANDARD LIBRARY INCLUDES
 //////////////////////////////////////////////////////////////////////////////
+#include <any>
 #include <cstddef>
 #include <expected>
 #include <list>
+#include <optional>
 
 //////////////////////////////////////////////////////////////////////////////
 // PROJECT INCLUDES
@@ -32,6 +34,15 @@ along with LOOT Userlist.yaml Manager.  If not, see
 
 namespace luyamlman::error {
 
+/**
+ * @brief Represents an error within the library.
+ *
+ * This class is used to encapsulate an error that has occurred, along with
+ * any additional errors that may have occurred during the same operation.
+ *
+ * This class is the error type used in `luyamlman::result<T>`, which itself
+ * is an alias for `std::expected<T, luyamlman::error::s_error>`
+ */
 class s_error
 {
     public:
@@ -42,7 +53,7 @@ class s_error
             = std::list<s_error>::const_reverse_iterator;
 
     public:
-        s_error(
+        explicit s_error(
             luyamlman::error::v_error_details a_details
         )
             : m_details( std::move( a_details ) )
@@ -117,6 +128,33 @@ class s_error
             return m_details;
         }
 
+        void
+        return_value(
+            std::any a_return_value
+        )
+        {
+            m_return_value = std::move( a_return_value );
+        }
+
+        template <typename T>
+        std::optional<T>
+        return_value_as()
+        {
+            if( !m_return_value.has_value() )
+            {
+                return std::nullopt;
+            }
+
+            if( T* p_value = std::any_cast<T>( &( *m_return_value ) ) )
+            {
+                T value = std::move( *p_value );
+                m_return_value.reset();
+                return std::make_optional( std::move( value ) );
+            }
+
+            return std::nullopt;
+        }
+
     public:
         void
         consolidate_errors();
@@ -132,6 +170,7 @@ class s_error
     private:
         luyamlman::error::v_error_details m_details;
         std::list<s_error>                m_additional_errors;
+        std::optional<std::any>           m_return_value;
 };
 } // namespace luyamlman::error
 
@@ -140,4 +179,10 @@ namespace luyamlman {
 template <typename T>
 using result = std::expected<T, luyamlman::error::s_error>;
 
-}
+template <typename T>
+using result_jsondumped = std::expected<T, std::string>;
+
+template <typename T>
+using result_jsondumped_cstr = std::expected<T, char*>;
+
+} // namespace luyamlman
