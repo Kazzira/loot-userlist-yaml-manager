@@ -110,13 +110,13 @@ parse_load_order_file(
 
         if( error_occurred )
         {
+            // Move here since we're not inserting into the vector anymore.
+            // But I still want to see what other errors occur.
             unique_plugins.insert( std::move( line ) );
-            // If an error has already occurred, we can skip further processing.
             continue;
         }
 
         unique_plugins.insert( line );
-        // Add the valid line to the load order.
         parse_result->push_back( std::move( line ) );
     }
 
