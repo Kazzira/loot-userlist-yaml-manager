@@ -53,119 +53,57 @@ class s_error
             = std::list<s_error>::const_reverse_iterator;
 
     public:
-        explicit s_error(
-            luyamlman::error::v_error_details a_details
-        )
-            : m_details( std::move( a_details ) )
-        {
-        }
+        explicit inline s_error( luyamlman::error::v_error_details a_details
+        ) noexcept;
 
     public:
-        iterator
-        begin()
-        {
-            return m_additional_errors.begin();
-        }
+        inline iterator
+        begin() noexcept;
 
-        const_iterator
-        begin() const
-        {
-            return m_additional_errors.begin();
-        }
+        inline const_iterator
+        begin() const noexcept;
 
-        iterator
-        end()
-        {
-            return m_additional_errors.end();
-        }
+        inline iterator
+        end() noexcept;
 
-        const_iterator
-        end() const
-        {
-            return m_additional_errors.end();
-        }
+        inline const_iterator
+        end() const noexcept;
 
-        reverse_iterator
-        rbegin()
-        {
-            return m_additional_errors.rbegin();
-        }
+        inline reverse_iterator
+        rbegin() noexcept;
 
-        const_reverse_iterator
-        rbegin() const
-        {
-            return m_additional_errors.rbegin();
-        }
+        inline const_reverse_iterator
+        rbegin() const noexcept;
 
-        reverse_iterator
-        rend()
-        {
-            return m_additional_errors.rend();
-        }
+        inline reverse_iterator
+        rend() noexcept;
 
-        const_reverse_iterator
-        rend() const
-        {
-            return m_additional_errors.rend();
-        }
+        inline const_reverse_iterator
+        rend() const noexcept;
 
-        bool
-        empty() const
-        {
-            return m_additional_errors.empty();
-        }
+        inline bool
+        empty() const noexcept;
 
-        size_t
-        size() const
-        {
-            return m_additional_errors.size() + 1;
-        }
+        inline size_t
+        size() const noexcept;
 
     public:
-        const luyamlman::error::v_error_details&
-        details() const
-        {
-            return m_details;
-        }
+        inline const luyamlman::error::v_error_details&
+        details() const noexcept;
 
-        void
-        return_value(
-            std::any a_return_value
-        )
-        {
-            m_return_value = std::move( a_return_value );
-        }
+        inline void
+        return_value( std::any a_return_value ) noexcept;
 
         template <typename T>
-        std::optional<T>
-        return_value_as()
-        {
-            if( !m_return_value.has_value() )
-            {
-                return std::nullopt;
-            }
-
-            if( T* p_value = std::any_cast<T>( &( *m_return_value ) ) )
-            {
-                T value = std::move( *p_value );
-                m_return_value.reset();
-                return std::make_optional( std::move( value ) );
-            }
-
-            return std::nullopt;
-        }
+        inline std::optional<T>
+        return_value_as() noexcept;
 
     public:
         void
-        consolidate_errors();
+        consolidate_errors() noexcept;
 
-        void
-        insert_additional_error(
-            s_error a_error
-        )
-        {
-            m_additional_errors.push_back( std::move( a_error ) );
-        }
+        inline void
+        insert_additional_error( s_error a_error );
 
     private:
         luyamlman::error::v_error_details m_details;
@@ -186,3 +124,6 @@ template <typename T>
 using result_jsondumped_cstr = std::expected<T, char*>;
 
 } // namespace luyamlman
+
+// Inline include.
+#include "luyamlman/error/s_error.inl"

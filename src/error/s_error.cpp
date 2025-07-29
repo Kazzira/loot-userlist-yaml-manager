@@ -29,7 +29,7 @@ along with LOOT Userlist.yaml Manager.  If not, see
 namespace luyamlman::error {
 
 void
-s_error::consolidate_errors()
+s_error::consolidate_errors() noexcept
 {
     for( auto& error : m_additional_errors )
     {
