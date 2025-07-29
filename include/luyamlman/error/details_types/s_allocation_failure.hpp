@@ -18,16 +18,11 @@ You should have received a copy of the GNU General Public License
 along with LOOT Userlist.yaml Manager.  If not, see
 <http://www.gnu.org/licenses/>.
 */
-//////////////////////////////////////////////////////////////////////////////
-// STANDARD LIBRARY INCLUDES
-//////////////////////////////////////////////////////////////////////////////
-#include <filesystem>
 
 namespace luyamlman::error_details_types {
 
 struct s_allocation_failure
 {
-        std::filesystem::path m_path;
 };
 
 } // namespace luyamlman::error_details_types
