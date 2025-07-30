@@ -59,7 +59,7 @@ class _Lib:
     def __init__(self) -> None:
         if sys.platform.startswith("win"):
             self.__lib = CDLL(
-                str(pathlib.Path(__file__).parent / "LootUserListYAMLManagerFII.dll")
+                str(pathlib.Path(__file__).parent / "LootUserListYAMLManagerFFI.dll")
             )
         else:
             self.__lib = CDLL(
