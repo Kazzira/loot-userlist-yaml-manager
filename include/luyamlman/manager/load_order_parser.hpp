@@ -32,7 +32,21 @@ along with LOOT Userlist.yaml Manager.  If not, see
 
 namespace luyamlman::manager {
 
+/**
+ * @brief Parses a load order file and returns a vector of plugin names.
+ *
+ * This function reads a load order file, extracts plugin names, and ensures
+ * that each plugin name is unique. It trims whitespace from each line
+ * and skips empty lines. If a duplicate plugin name is found, it
+ * returns an error with details about the duplicate plugin and its line number.
+ * If the file cannot be opened, it returns an error indicating a filesystem
+ * issue.
+ *
+ * @param a_load_order_file_path The path to the load order file to be parsed.
+ * @return A result containing a vector of unique plugin names if successful, or
+ * an error if the file could not be opened or if a duplicate plugin was found.
+ */
 result<std::vector<std::string>>
 parse_load_order_file( std::string_view a_load_order_file_path );
 
-}
+} // namespace luyamlman::manager

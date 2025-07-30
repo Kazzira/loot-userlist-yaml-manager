@@ -51,6 +51,7 @@ parse_load_order_file(
     std::set<std::string>            unique_plugins;
     std::ifstream load_order_file( a_load_order_file_path.data() );
 
+    // Manager-2
     if( !load_order_file.is_open() )
     {
         parse_result = std::unexpected(
@@ -81,7 +82,8 @@ parse_load_order_file(
             continue;
         }
 
-        // Check for duplicate plugins.
+        // Manager-2
+        // Manager-3
         if( unique_plugins.find( line ) != unique_plugins.end() )
         {
             if( !error_occurred )
