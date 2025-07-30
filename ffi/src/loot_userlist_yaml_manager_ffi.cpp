@@ -128,9 +128,9 @@ loot_userlist_yaml_manager_destroy_handle(
 }
 
 void
-loot_userlist_yaml_manager_destroy_error_json_contents(
-    [[maybe_unused]] char* a_error_json_contents
+loot_userlist_yaml_manager_destroy_string(
+    char* a_str
 )
 {
-    delete[] a_error_json_contents;
+    delete[] a_str;
 }

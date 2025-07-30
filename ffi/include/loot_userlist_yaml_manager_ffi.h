@@ -63,9 +63,7 @@ extern "C"
     );
 
     void
-    loot_userlist_yaml_manager_destroy_error_json_contents(
-        char* a_error_json_contents
-    );
+    loot_userlist_yaml_manager_destroy_string( char* a_str );
 
 #ifdef __cplusplus
 }

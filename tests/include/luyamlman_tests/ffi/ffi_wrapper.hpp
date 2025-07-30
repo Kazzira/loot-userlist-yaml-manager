@@ -34,33 +34,50 @@ namespace luyamlman_tests::ffi {
 
 class s_ffi_wrapper
 {
-public:
-    s_ffi_wrapper(
-        const std::string_view load_order_file_path,
-        const std::string_view config_path
-    );
-public:
-    ~s_ffi_wrapper() noexcept;
-public:
-    s_ffi_wrapper(s_ffi_wrapper&&) noexcept;
-    s_ffi_wrapper(const s_ffi_wrapper&) noexcept = delete;
-    s_ffi_wrapper& operator=(s_ffi_wrapper&&) noexcept;
-    s_ffi_wrapper& operator=(const s_ffi_wrapper&) noexcept = delete;
-public:
-    operator bool() const noexcept { return m_handle != nullptr; }
-public:
-    uint32_t
-    construction_return_code() const noexcept { return m_construction_return_code; }
+    public:
+        s_ffi_wrapper(
+            const std::string_view load_order_file_path,
+            const std::string_view config_path
+        );
 
-    std::optional<std::string>&
-    error_json_contents() noexcept { return m_error_json_contents; }
+    public:
+        ~s_ffi_wrapper() noexcept;
 
-    const std::optional<std::string>&
-    error_json_contents() const noexcept { return m_error_json_contents; }
-private:
-    uint32_t                          m_construction_return_code;
-    std::optional<std::string>        m_error_json_contents {std::nullopt};
-    loot_userlist_yaml_manager_handle m_handle {nullptr};
+    public:
+        s_ffi_wrapper( s_ffi_wrapper&& ) noexcept;
+        s_ffi_wrapper( const s_ffi_wrapper& ) noexcept = delete;
+        s_ffi_wrapper&
+        operator=( s_ffi_wrapper&& ) noexcept;
+        s_ffi_wrapper&
+        operator=( const s_ffi_wrapper& ) noexcept
+            = delete;
+
+    public:
+        operator bool() const noexcept { return m_handle != nullptr; }
+
+    public:
+        uint32_t
+        construction_return_code() const noexcept
+        {
+            return m_construction_return_code;
+        }
+
+        std::optional<std::string>&
+        error_json_contents() noexcept
+        {
+            return m_error_json_contents;
+        }
+
+        const std::optional<std::string>&
+        error_json_contents() const noexcept
+        {
+            return m_error_json_contents;
+        }
+
+    private:
+        uint32_t                          m_construction_return_code;
+        std::optional<std::string>        m_error_json_contents{ std::nullopt };
+        loot_userlist_yaml_manager_handle m_handle{ nullptr };
 };
 
-}
+} // namespace luyamlman_tests::ffi

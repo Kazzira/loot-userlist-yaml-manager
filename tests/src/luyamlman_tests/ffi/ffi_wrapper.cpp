@@ -31,40 +31,47 @@ s_ffi_wrapper::s_ffi_wrapper(
 {
     char* error_json_contents_ptr = nullptr;
 
-    m_construction_return_code = loot_userlist_yaml_manager_create_handle(
+    m_construction_return_code    = loot_userlist_yaml_manager_create_handle(
         &m_handle,
         load_order_file_path.data(),
         config_path.data(),
         &error_json_contents_ptr
     );
 
-    if (!m_handle && error_json_contents_ptr)
+    if( !m_handle && error_json_contents_ptr )
     {
-        m_error_json_contents.emplace(error_json_contents_ptr);
-        loot_userlist_yaml_manager_destroy_error_json_contents(error_json_contents_ptr);
+        m_error_json_contents.emplace( error_json_contents_ptr );
+        loot_userlist_yaml_manager_destroy_string( error_json_contents_ptr );
     }
 }
 
 s_ffi_wrapper::~s_ffi_wrapper() noexcept
 {
-    loot_userlist_yaml_manager_destroy_handle(m_handle);
+    loot_userlist_yaml_manager_destroy_handle( m_handle );
 }
 
-s_ffi_wrapper::s_ffi_wrapper(s_ffi_wrapper&& other) noexcept
-    : m_handle(other.m_handle)
+s_ffi_wrapper::s_ffi_wrapper(
+    s_ffi_wrapper&& other
+) noexcept
+    : m_handle( other.m_handle )
 {
-    other.m_handle = nullptr; // Ensure the moved-from object does not destroy the handle.
+    other.m_handle
+        = nullptr; // Ensure the moved-from object does not destroy the handle.
 }
 
-s_ffi_wrapper& s_ffi_wrapper::operator=(s_ffi_wrapper&& other) noexcept
+s_ffi_wrapper&
+s_ffi_wrapper::operator=(
+    s_ffi_wrapper&& other
+) noexcept
 {
-    if (this != &other) {
-        loot_userlist_yaml_manager_destroy_handle(m_handle);
-        m_handle = other.m_handle;
+    if( this != &other )
+    {
+        loot_userlist_yaml_manager_destroy_handle( m_handle );
+        m_handle       = other.m_handle;
         other.m_handle = nullptr;
     }
 
     return *this;
 }
 
-}
+} // namespace luyamlman_tests::ffi

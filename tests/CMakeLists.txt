@@ -60,4 +60,3 @@ add_custom_command(
 add_custom_target(run-luyamlman-tests ALL
   DEPENDS _run-luyamlman-tests-completed
 )
-
