@@ -43,6 +43,13 @@
 build/
 compile_commands.json
 Testing/
+.cache/
 
 # Python....
 .mypy_cache/
+.venv/
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+mobase/
+.coverage
