@@ -22,3 +22,11 @@ target_link_libraries(
     PUBLIC
     luyamlman
 )
+
+add_custom_command(
+    TARGET LootUserListYAMLManagerFFI
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    $<TARGET_FILE:LootUserListYAMLManagerFFI>
+    "${MO2_PLUGIN_DIR}"
+)

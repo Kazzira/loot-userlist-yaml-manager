@@ -16,6 +16,7 @@ set(ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 set(FFI_DIR "${ROOT_DIR}/ffi")
 set(INCLUDE_DIR "${ROOT_DIR}/include")
 set(SRC_DIR "${ROOT_DIR}/src")
+set(MO2_PLUGIN_DIR "${ROOT_DIR}/mo2-plugin/loot_userlist_yaml_manager")
 
 project (${PROJECT_NAME})
 
