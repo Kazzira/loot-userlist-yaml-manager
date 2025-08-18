@@ -25,19 +25,105 @@ along with LOOT Userlist.yaml Manager.  If not, see
 //////////////////////////////////////////////////////////////////////////////
 // PROJECT INCLUDES
 //////////////////////////////////////////////////////////////////////////////
+#include "luyamlman/error/details_types/s_load_order_read_error.hpp"
 #include "luyamlman/error/s_error.hpp"
 
 TEST_CASE(
-    "luyamlman::error::s_error: Consolidate Errors",
-    "[luyamlman]"
-    "[error]"
-    "[s_error]"
-    "[consolidate_errors]"
+    "luyamlman::error::s_error: Consolidate just one error",
+    "[luyamlman][error][s_error][consolidate_errors]"
 )
 {
-    luyamlman::error::s_error error_instance(
-        luyamlman::error_details_types::s_allocation_failure{}
+    using luyamlman::error::s_error;
+    using luyamlman::error::v_error_details;
+    using luyamlman::error_details_types::s_allocation_failure;
+
+    s_error error( v_error_details{ s_allocation_failure{} } );
+
+    REQUIRE( error.size() == 1 );
+    error.consolidate_errors();
+    REQUIRE( error.size() == 1 );
+}
+
+TEST_CASE(
+    "luyamlman::error::s_error: consolidate errors - one nested error",
+    "[luyamlman][error][s_error][consolidate_errors]"
+)
+{
+    using luyamlman::error::s_error;
+    using luyamlman::error::v_error_details;
+    using luyamlman::error_details_types::s_allocation_failure;
+    using luyamlman::error_details_types::s_load_order_read_error;
+
+    s_error error( v_error_details{
+        s_load_order_read_error{
+                                .m_code        = s_load_order_read_error::e_code::duplicate_plugin,
+                                .m_line_number = 42,
+                                .m_plugin_name = "Fun.esp"
+        }
+    } );
+
+    s_error nested_error( v_error_details{
+        s_load_order_read_error{
+                                .m_code        = s_load_order_read_error::e_code::duplicate_plugin,
+                                .m_line_number = 43,
+                                .m_plugin_name = "Fun2.esp"
+        }
+    } );
+
+    nested_error.insert_additional_error( s_error( v_error_details{
+        s_load_order_read_error{
+                                .m_code        = s_load_order_read_error::e_code::duplicate_plugin,
+                                .m_line_number = 44,
+                                .m_plugin_name = "Fun3.esp"
+        }
+    } ) );
+    nested_error.insert_additional_error( s_error( v_error_details{
+        s_load_order_read_error{
+                                .m_code        = s_load_order_read_error::e_code::duplicate_plugin,
+                                .m_line_number = 45,
+                                .m_plugin_name = "Fun4.esp"
+        }
+    } ) );
+
+    error.insert_additional_error( s_error( v_error_details{
+        s_load_order_read_error{
+                                .m_code        = s_load_order_read_error::e_code::duplicate_plugin,
+                                .m_line_number = 46,
+                                .m_plugin_name = "Fun5.esp"
+        }
+    } ) );
+
+    error.insert_additional_error( std::move( nested_error ) );
+
+    REQUIRE( error.size() == 3 );
+
+    auto it = error.begin();
+
+    CHECK(
+        std::get<s_load_order_read_error>( it->details() ).m_line_number == 46
+    );
+    ++it;
+    CHECK(
+        std::get<s_load_order_read_error>( it->details() ).m_line_number == 43
     );
 
-    REQUIRE_NOTHROW( error_instance.consolidate_errors() );
+    error.consolidate_errors();
+    REQUIRE( error.size() == 5 );
+
+    it = error.begin();
+    CHECK(
+        std::get<s_load_order_read_error>( it->details() ).m_line_number == 46
+    );
+    ++it;
+    CHECK(
+        std::get<s_load_order_read_error>( it->details() ).m_line_number == 43
+    );
+    ++it;
+    CHECK(
+        std::get<s_load_order_read_error>( it->details() ).m_line_number == 44
+    );
+    ++it;
+    CHECK(
+        std::get<s_load_order_read_error>( it->details() ).m_line_number == 45
+    );
 }

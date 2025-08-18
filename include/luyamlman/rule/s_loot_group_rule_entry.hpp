@@ -21,33 +21,19 @@ along with LOOT Userlist.yaml Manager.  If not, see
 //////////////////////////////////////////////////////////////////////////////
 // STANDARD LIBRARY INCLUDES
 //////////////////////////////////////////////////////////////////////////////
-#include <cstdint>
-#include <string>
+#include <optional>
 
 //////////////////////////////////////////////////////////////////////////////
-// THIRD PARTY INCLUDES
+// PROJECT INCLUDES
 //////////////////////////////////////////////////////////////////////////////
-#include <meta_enum.hpp>
-#include <nlohmann/json.hpp>
+#include "luyamlman/types/t_loot_group_name.hpp"
 
-namespace luyamlman::error_details_types {
+namespace luyamlman::rule {
 
-struct s_load_order_read_error
+struct s_loot_group_rule_entry
 {
-        meta_enum_class( e_code, uint32_t, duplicate_plugin ) using error_code
-            = e_code;
-
-        error_code  m_code;
-        uint32_t    m_line_number;
-        std::string m_plugin_name;
+        luyamlman::types::t_loot_group_name                m_loot_group;
+        std::optional<luyamlman::types::t_loot_group_name> m_after;
 };
 
-NLOHMANN_JSON_SERIALIZE_ENUM(
-    s_load_order_read_error::e_code,
-    {
-        { s_load_order_read_error::e_code::duplicate_plugin, "duplicate_plugin"
-        }
-}
-)
-
-} // namespace luyamlman::error_details_types
+} // namespace luyamlman::rule

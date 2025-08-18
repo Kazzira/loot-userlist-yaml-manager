@@ -21,33 +21,45 @@ along with LOOT Userlist.yaml Manager.  If not, see
 //////////////////////////////////////////////////////////////////////////////
 // STANDARD LIBRARY INCLUDES
 //////////////////////////////////////////////////////////////////////////////
-#include <cstdint>
-#include <string>
+#include <string_view>
+#include <vector>
 
 //////////////////////////////////////////////////////////////////////////////
-// THIRD PARTY INCLUDES
+// PROJECT INCLUDES
 //////////////////////////////////////////////////////////////////////////////
-#include <meta_enum.hpp>
-#include <nlohmann/json.hpp>
+#include "luyamlman/error/s_error.hpp"
+#include "luyamlman/types/t_plugin_name.hpp"
 
-namespace luyamlman::error_details_types {
+namespace luyamlman::manager {
 
-struct s_load_order_read_error
+class s_manager
 {
-        meta_enum_class( e_code, uint32_t, duplicate_plugin ) using error_code
-            = e_code;
+    private:
+        s_manager() noexcept = default;
 
-        error_code  m_code;
-        uint32_t    m_line_number;
-        std::string m_plugin_name;
+    public:
+        static result<s_manager>
+        create(
+            std::string_view a_load_order_file_path,
+            std::string_view a_config_json_file_path
+        );
+
+        static result<s_manager *>
+        create_ptr(
+            std::string_view a_load_order_file_path,
+            std::string_view a_config_json_file_path
+        );
+
+    private:
+        result<void>
+        initialize(
+            std::string_view a_load_order_file_path,
+            std::string_view a_config_json_file_path
+        );
+
+    private:
+        std::vector<std::string>                     m_owned_load_order;
+        std::vector<luyamlman::types::t_plugin_name> m_load_order;
 };
 
-NLOHMANN_JSON_SERIALIZE_ENUM(
-    s_load_order_read_error::e_code,
-    {
-        { s_load_order_read_error::e_code::duplicate_plugin, "duplicate_plugin"
-        }
-}
-)
-
-} // namespace luyamlman::error_details_types
+} // namespace luyamlman::manager

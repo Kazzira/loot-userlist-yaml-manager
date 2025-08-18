@@ -21,33 +21,24 @@ along with LOOT Userlist.yaml Manager.  If not, see
 //////////////////////////////////////////////////////////////////////////////
 // STANDARD LIBRARY INCLUDES
 //////////////////////////////////////////////////////////////////////////////
-#include <cstdint>
-#include <string>
+#include <map>
 
 //////////////////////////////////////////////////////////////////////////////
-// THIRD PARTY INCLUDES
+// PROJECT INCLUDES
 //////////////////////////////////////////////////////////////////////////////
-#include <meta_enum.hpp>
-#include <nlohmann/json.hpp>
+#include "luyamlman/rule/s_loot_group_rule_entry.hpp"
+#include "luyamlman/types/t_loot_group_name.hpp"
+#include "luyamlman/types/t_plugin_name.hpp"
 
-namespace luyamlman::error_details_types {
+namespace luyamlman::manager {
 
-struct s_load_order_read_error
+struct s_config
 {
-        meta_enum_class( e_code, uint32_t, duplicate_plugin ) using error_code
-            = e_code;
-
-        error_code  m_code;
-        uint32_t    m_line_number;
-        std::string m_plugin_name;
+        std::vector<luyamlman::rule::s_loot_group_rule_entry>
+            m_loot_group_rules;
+        std::map<
+            luyamlman::types::t_loot_group_name,
+            std::vector<luyamlman::types::t_plugin_name>>
+            m_plugin_starting_points;
 };
-
-NLOHMANN_JSON_SERIALIZE_ENUM(
-    s_load_order_read_error::e_code,
-    {
-        { s_load_order_read_error::e_code::duplicate_plugin, "duplicate_plugin"
-        }
-}
-)
-
-} // namespace luyamlman::error_details_types
+} // namespace luyamlman::manager

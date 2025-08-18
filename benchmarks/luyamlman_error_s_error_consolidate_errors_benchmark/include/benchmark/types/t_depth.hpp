@@ -18,36 +18,30 @@ You should have received a copy of the GNU General Public License
 along with LOOT Userlist.yaml Manager.  If not, see
 <http://www.gnu.org/licenses/>.
 */
-//////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 // STANDARD LIBRARY INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 #include <cstdint>
-#include <string>
 
-//////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 // THIRD PARTY INCLUDES
-//////////////////////////////////////////////////////////////////////////////
-#include <meta_enum.hpp>
-#include <nlohmann/json.hpp>
+/////////////////////////////////////////////////////////////////////////////
+#include <strong_type/arithmetic.hpp>
+#include <strong_type/ordered.hpp>
+#include <strong_type/strong_type.hpp>
 
-namespace luyamlman::error_details_types {
+namespace benchmark::types {
 
-struct s_load_order_read_error
-{
-        meta_enum_class( e_code, uint32_t, duplicate_plugin ) using error_code
-            = e_code;
+using t_depth = strong::
+    type<int32_t, struct t_depth_tag, strong::ordered, strong::arithmetic>;
 
-        error_code  m_code;
-        uint32_t    m_line_number;
-        std::string m_plugin_name;
-};
-
-NLOHMANN_JSON_SERIALIZE_ENUM(
-    s_load_order_read_error::e_code,
+namespace literals {
+    inline constexpr t_depth
+    operator"" _depth(
+        unsigned long long value
+    ) noexcept
     {
-        { s_load_order_read_error::e_code::duplicate_plugin, "duplicate_plugin"
-        }
-}
-)
-
-} // namespace luyamlman::error_details_types
+        return t_depth{ static_cast<int32_t>( value ) };
+    }
+} // namespace literals
+} // namespace benchmark::types

@@ -30,15 +30,11 @@ along with LOOT Userlist.yaml Manager.  If not, see
 //////////////////////////////////////////////////////////////////////////////
 // PROJECT INCLUDES
 //////////////////////////////////////////////////////////////////////////////
-#include "luyamlman/manager/load_order_parser.hpp"
+#include "luyamlman/error/details_types/s_allocation_failure.hpp"
+#include "luyamlman/manager/s_manager.hpp"
+#include "luyamlman/overloads.hpp"
 
 namespace {
-
-class s_loot_userlist_yaml_manager_handle
-{
-    public:
-        std::vector<std::string> m_load_order;
-};
 
 } // namespace
 
@@ -94,22 +90,49 @@ loot_userlist_yaml_manager_create_handle(
     [[maybe_unused]] char** a_userlist_error_json_contents
 )
 {
+    using luyamlman::error_details_types::s_allocation_failure;
+    using luyamlman::error_details_types::s_filesystem_error;
+    using luyamlman::error_details_types::s_load_order_read_error;
     try
     {
-        auto load_order
-            = luyamlman::manager::parse_load_order_file( a_load_order_file_path
-            );
+        auto mgr = luyamlman::manager::s_manager::
+            create_ptr( a_load_order_file_path, a_config_json_file_path );
 
-        if( !load_order )
+        if( !mgr )
         {
-            return LUYAMLMAN_ERR_LOAD_ORDER_FILE_NOT_FOUND();
+            return std::visit(
+                luyamlman::overloads{
+                    []( const s_allocation_failure& )
+                    {
+                        return LUYAMLMAN_ERR_ALLOCATION_FAILED();
+                    },
+                    [&]( const s_filesystem_error& fs_err )
+                    {
+                        if( fs_err.m_path == a_load_order_file_path )
+                        {
+                            return LUYAMLMAN_ERR_LOAD_ORDER_FILE_NOT_FOUND();
+                        }
+                        else if( fs_err.m_path == a_config_json_file_path )
+                        {
+                            return LUYAMLMAN_ERR_CONFIG_JSON_FILE_NOT_FOUND();
+                        }
+                        else
+                        {
+                            return LUYAMLMAN_ERR_ALLOCATION_FAILED();
+                        }
+                    },
+                    []( const s_load_order_read_error& )
+                    {
+                        return LUYAMLMAN_ERR_LOAD_ORDER_FILE_INVALID();
+                    }
+                },
+                mgr.error().details()
+            );
         }
 
-        *a_handle = new s_loot_userlist_yaml_manager_handle();
+        *a_handle = *mgr;
 
-        static_cast<s_loot_userlist_yaml_manager_handle*>( *a_handle )
-            ->m_load_order
-            = std::move( *load_order );
+        return LUYAMLMAN_OK();
     }
     catch( const std::bad_alloc& )
     {
@@ -124,7 +147,7 @@ loot_userlist_yaml_manager_destroy_handle(
     loot_userlist_yaml_manager_handle a_handle
 )
 {
-    delete static_cast<s_loot_userlist_yaml_manager_handle*>( a_handle );
+    delete static_cast<luyamlman::manager::s_manager*>( a_handle );
 }
 
 void

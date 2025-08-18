@@ -11,6 +11,7 @@ as well as the retrieval of return codes and error messages.
 import pathlib
 import sys
 from ctypes import c_char_p, c_uint32, c_void_p, POINTER, byref, CDLL
+from typing import Protocol
 from dataclasses import dataclass
 
 
@@ -163,23 +164,29 @@ class _Lib:
         self.__lib.loot_userlist_yaml_manager_destroy_string(string)
 
 
-class ManagerContext:
+class IManagerInUseContext(Protocol):
     """
     The LOOT User List YAML Manager context created by the ManagerHandle.
-
-    This context is used to manage the handle to the Loot User List YAML Manager.
-    It provides a boolean interface to check if the handle is valid.
-
-    :param handle: The handle to the Loot User List YAML Manager.
-    :type handle: c_void_p
     """
 
-    def __init__(self, handle: c_void_p) -> None:
-        self.__handle = handle
-        self.__error_message = ""
+    def __bool__(self) -> bool: ...
 
-    def __bool__(self) -> bool:
-        return self.__handle.value is not None
+
+class IManager(Protocol):
+    """
+    The LOOT User List YAML Manager interface.
+    This interface only defines the context manager methods for creating and managing a handle.
+    """
+
+    def __enter__(self) -> IManagerInUseContext:
+        """
+        Enter the context manager and return the context object.
+        """
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        """
+        Exit the context manager and clean up the handle.
+        """
 
 
 class ManagerHandle:
@@ -187,12 +194,30 @@ class ManagerHandle:
     A context manager for creating and managing a handle to the Loot User List YAML Manager.
     """
 
+    @staticmethod
+    def create(load_order_path: str, config_json_path: str) -> IManager:
+        """
+        Create a new ManagerHandle instance.
+
+        :param load_order_path: The path to the load order file.
+        :type load_order_path: str
+        :param config_json_path: The path to the configuration JSON file.
+        :type config_json_path: str
+
+        :return: An instance of ManagerHandle.
+        """
+        return ManagerHandle(load_order_path, config_json_path)
+
     def __init__(self, load_order_path: str, config_json_path: str) -> None:
         self.__load_order_path = load_order_path
         self.__config_json_path = config_json_path
         self.__handle = c_void_p(0)
+        self.__char_ptr = c_char_p(0)
 
-    def __enter__(self) -> ManagerContext:
+    def __bool__(self) -> bool:
+        return self.__handle.value is not None
+
+    def __enter__(self) -> IManagerInUseContext:
         result, error_message = _Lib.instance().create_handle(
             self.__load_order_path, self.__config_json_path, self.__handle
         )
@@ -200,7 +225,7 @@ class ManagerHandle:
         # Will want to throw an exception if the result is not OK.
         # Currently, do not have json support in the DLL so not error text.
 
-        return ManagerContext(self.__handle)
+        return self
 
     def __exit__(self, exc_type, exc_value, traceback):
         if self.__handle:

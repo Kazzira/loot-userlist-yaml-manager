@@ -1,4 +1,3 @@
-#pragma once
 /*
 Copyright (C) 2024-2025 Zachary Dakota Meyer. All rights reserved.
 
@@ -18,36 +17,9 @@ You should have received a copy of the GNU General Public License
 along with LOOT Userlist.yaml Manager.  If not, see
 <http://www.gnu.org/licenses/>.
 */
-//////////////////////////////////////////////////////////////////////////////
-// STANDARD LIBRARY INCLUDES
-//////////////////////////////////////////////////////////////////////////////
-#include <cstdint>
-#include <string>
+#define LUYALMMAN_INSTANTIATE_TEMPLATES_TYPES_TPLUGINNAME
 
 //////////////////////////////////////////////////////////////////////////////
-// THIRD PARTY INCLUDES
+// PROJECT INCLUDES
 //////////////////////////////////////////////////////////////////////////////
-#include <meta_enum.hpp>
-#include <nlohmann/json.hpp>
-
-namespace luyamlman::error_details_types {
-
-struct s_load_order_read_error
-{
-        meta_enum_class( e_code, uint32_t, duplicate_plugin ) using error_code
-            = e_code;
-
-        error_code  m_code;
-        uint32_t    m_line_number;
-        std::string m_plugin_name;
-};
-
-NLOHMANN_JSON_SERIALIZE_ENUM(
-    s_load_order_read_error::e_code,
-    {
-        { s_load_order_read_error::e_code::duplicate_plugin, "duplicate_plugin"
-        }
-}
-)
-
-} // namespace luyamlman::error_details_types
+#include "luyamlman/types/t_plugin_name.hpp"

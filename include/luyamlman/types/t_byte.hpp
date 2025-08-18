@@ -21,33 +21,20 @@ along with LOOT Userlist.yaml Manager.  If not, see
 //////////////////////////////////////////////////////////////////////////////
 // STANDARD LIBRARY INCLUDES
 //////////////////////////////////////////////////////////////////////////////
-#include <cstdint>
-#include <string>
+#include <string_view>
 
 //////////////////////////////////////////////////////////////////////////////
 // THIRD PARTY INCLUDES
 //////////////////////////////////////////////////////////////////////////////
-#include <meta_enum.hpp>
-#include <nlohmann/json.hpp>
+#include <strong_type/convertible_to.hpp>
+#include <strong_type/formattable.hpp>
+#include <strong_type/hashable.hpp>
+#include <strong_type/indexed.hpp>
+#include <strong_type/iostreamable.hpp>
+#include <strong_type/ordered.hpp>
+#include <strong_type/strong_type.hpp>
 
-namespace luyamlman::error_details_types {
-
-struct s_load_order_read_error
-{
-        meta_enum_class( e_code, uint32_t, duplicate_plugin ) using error_code
-            = e_code;
-
-        error_code  m_code;
-        uint32_t    m_line_number;
-        std::string m_plugin_name;
-};
-
-NLOHMANN_JSON_SERIALIZE_ENUM(
-    s_load_order_read_error::e_code,
-    {
-        { s_load_order_read_error::e_code::duplicate_plugin, "duplicate_plugin"
-        }
-}
-)
-
-} // namespace luyamlman::error_details_types
+namespace luyamlman::types {
+using t_byte
+    = strong::type<char, struct s_byte_tag, strong::convertible_to<int>>;
+} // namespace luyamlman::types
