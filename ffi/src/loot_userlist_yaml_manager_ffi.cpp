@@ -95,7 +95,7 @@ loot_userlist_yaml_manager_create_handle(
     using luyamlman::error_details_types::s_load_order_read_error;
     try
     {
-        auto mgr = luyamlman::manager::s_manager::
+        auto mgr = luyamlman::manager::s_manager<>::
             create_ptr( a_load_order_file_path, a_config_json_file_path );
 
         if( !mgr )
@@ -147,7 +147,7 @@ loot_userlist_yaml_manager_destroy_handle(
     loot_userlist_yaml_manager_handle a_handle
 )
 {
-    delete static_cast<luyamlman::manager::s_manager*>( a_handle );
+    delete static_cast<luyamlman::manager::s_manager<>*>( a_handle );
 }
 
 void

@@ -29,6 +29,7 @@ along with LOOT Userlist.yaml Manager.  If not, see
 // PROJECT INCLUDES
 //////////////////////////////////////////////////////////////////////////////
 #include "luyamlman/error/s_error.hpp"
+#include "luyamlman/types/t_plugin_name.hpp"
 
 namespace luyamlman::manager {
 
@@ -46,7 +47,15 @@ namespace luyamlman::manager {
  * @return A result containing a vector of unique plugin names if successful, or
  * an error if the file could not be opened or if a duplicate plugin was found.
  */
-result<std::vector<std::string>>
+template <
+    template <class> typename AVectorAllocator         = std::allocator,
+    template <class> typename ACharAllocator           = std::allocator,
+    template <class> typename ATempStringCharAllocator = std::allocator>
+result<std::vector<
+    luyamlman::types::t_plugin_name,
+    AVectorAllocator<luyamlman::types::t_plugin_name>>>
 parse_load_order_file( std::string_view a_load_order_file_path );
 
 } // namespace luyamlman::manager
+
+#include "luyamlman/manager/load_order_parser.tpp"

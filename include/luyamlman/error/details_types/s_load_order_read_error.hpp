@@ -22,13 +22,17 @@ along with LOOT Userlist.yaml Manager.  If not, see
 // STANDARD LIBRARY INCLUDES
 //////////////////////////////////////////////////////////////////////////////
 #include <cstdint>
-#include <string>
 
 //////////////////////////////////////////////////////////////////////////////
 // THIRD PARTY INCLUDES
 //////////////////////////////////////////////////////////////////////////////
 #include <meta_enum.hpp>
 #include <nlohmann/json.hpp>
+
+//////////////////////////////////////////////////////////////////////////////
+// PROJECT INCLUDES
+//////////////////////////////////////////////////////////////////////////////
+#include "luyamlman/types/t_plugin_name.hpp"
 
 namespace luyamlman::error_details_types {
 
@@ -37,9 +41,9 @@ struct s_load_order_read_error
         meta_enum_class( e_code, uint32_t, duplicate_plugin ) using error_code
             = e_code;
 
-        error_code  m_code;
-        uint32_t    m_line_number;
-        std::string m_plugin_name;
+        error_code                      m_code;
+        uint32_t                        m_line_number;
+        luyamlman::types::t_plugin_name m_plugin_name;
 };
 
 NLOHMANN_JSON_SERIALIZE_ENUM(

@@ -21,32 +21,36 @@ along with LOOT Userlist.yaml Manager.  If not, see
 // THIRD PARTY INCLUDES
 /////////////////////////////////////////////////////////////////////////////
 #include <catch2/catch_all.hpp>
-#include <iterator>
 
 /////////////////////////////////////////////////////////////////////////////
 // PROJECT INCLUDES
 /////////////////////////////////////////////////////////////////////////////
 #include "luyamlman/error/details_types/s_load_order_read_error.hpp"
-#include "luyamlman/manager/load_order_parser.hpp"
+#include "luyamlman/manager/s_data.hpp"
 #include "luyamlman/overloads.hpp"
+#include "luyamlman/types/t_plugin_name.hpp"
 
 TEST_CASE(
     "luyamlman:manager: Test parsing a load order file",
     "[luyamlman][manager][load_order_parser]"
 )
 {
+    using namespace luyamlman::literals;
+
     auto load_order_file_path
         = std::filesystem::path( TEST_DATA_DIR ) / "load_order1.txt";
 
     auto load_order_file_path_str = load_order_file_path.string();
 
-    auto result
-        = luyamlman::manager::parse_load_order_file( load_order_file_path_str );
+    luyamlman::manager::s_data<> data;
+
+    auto result = data.parse_load_order_file( load_order_file_path_str );
 
     REQUIRE( result );
-    REQUIRE( result->size() == 2 );
-    REQUIRE( result->at( 0 ) == "Skyrim.esm" );
-    REQUIRE( result->at( 1 ) == "Update.esm" );
+
+    REQUIRE( data.load_order().size() == 2 );
+    REQUIRE( data.load_order()[0] == "Skyrim.esm"_esp );
+    REQUIRE( data.load_order()[1] == "Update.esm"_esp );
 }
 
 TEST_CASE(
@@ -54,13 +58,15 @@ TEST_CASE(
     "[luyamlman][manager][load_order_parser]"
 )
 {
+    using namespace luyamlman::literals;
+
     using luyamlman::error_details_types::s_load_order_read_error;
 
     auto load_order_file_path
         = std::filesystem::path( TEST_DATA_DIR ) / "load_order2.txt";
     auto load_order_file_path_str = load_order_file_path.string();
-    auto result
-        = luyamlman::manager::parse_load_order_file( load_order_file_path_str );
+    luyamlman::manager::s_data<> data;
+    auto result = data.parse_load_order_file( load_order_file_path_str );
 
     REQUIRE( !result );
 
@@ -84,7 +90,7 @@ TEST_CASE(
         == s_load_order_read_error::e_code::duplicate_plugin
     );
     CHECK( error_details.m_line_number == 7 );
-    CHECK( error_details.m_plugin_name == "Plugin3.esp" );
+    CHECK( error_details.m_plugin_name == "Plugin3.esp"_esp );
 }
 
 TEST_CASE(
@@ -92,13 +98,15 @@ TEST_CASE(
     "[luyamlman][manager][load_order_parser]"
 )
 {
+    using namespace luyamlman::literals;
+
     using luyamlman::error_details_types::s_load_order_read_error;
 
     auto load_order_file_path
         = std::filesystem::path( TEST_DATA_DIR ) / "load_order3.txt";
     auto load_order_file_path_str = load_order_file_path.string();
-    auto result
-        = luyamlman::manager::parse_load_order_file( load_order_file_path_str );
+    luyamlman::manager::s_data<> data;
+    auto result = data.parse_load_order_file( load_order_file_path_str );
 
     REQUIRE( !result );
 
@@ -107,7 +115,7 @@ TEST_CASE(
 
     auto perform_assertions = []( const luyamlman::error::s_error& a_error,
                                   uint32_t                        a_line_number,
-                                  std::string_view                a_plugin_name,
+                                  luyamlman::types::t_plugin_name a_plugin_name,
                                   s_load_order_read_error::e_code a_code )
     {
         std::visit(
@@ -136,7 +144,7 @@ TEST_CASE(
     perform_assertions(
         result.error(),
         8,
-        "Funtimes420.esp",
+        "Funtimes420.esp"_esp,
         s_load_order_read_error::e_code::duplicate_plugin
     );
 
@@ -145,7 +153,7 @@ TEST_CASE(
     perform_assertions(
         *it,
         10,
-        "HalfLife3.esm",
+        "HalfLife3.esm"_esp,
         s_load_order_read_error::e_code::duplicate_plugin
     );
 
@@ -154,7 +162,7 @@ TEST_CASE(
     perform_assertions(
         *it,
         11,
-        "Funtimes420.esp",
+        "Funtimes420.esp"_esp,
         s_load_order_read_error::e_code::duplicate_plugin
     );
 }

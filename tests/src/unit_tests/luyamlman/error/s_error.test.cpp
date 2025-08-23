@@ -27,6 +27,7 @@ along with LOOT Userlist.yaml Manager.  If not, see
 //////////////////////////////////////////////////////////////////////////////
 #include "luyamlman/error/details_types/s_load_order_read_error.hpp"
 #include "luyamlman/error/s_error.hpp"
+#include "luyamlman/types/t_plugin_name.hpp"
 
 TEST_CASE(
     "luyamlman::error::s_error: Consolidate just one error",
@@ -49,6 +50,8 @@ TEST_CASE(
     "[luyamlman][error][s_error][consolidate_errors]"
 )
 {
+    using namespace luyamlman::literals;
+
     using luyamlman::error::s_error;
     using luyamlman::error::v_error_details;
     using luyamlman::error_details_types::s_allocation_failure;
@@ -58,7 +61,7 @@ TEST_CASE(
         s_load_order_read_error{
                                 .m_code        = s_load_order_read_error::e_code::duplicate_plugin,
                                 .m_line_number = 42,
-                                .m_plugin_name = "Fun.esp"
+                                .m_plugin_name = "Fun.esp"_esp
         }
     } );
 
@@ -66,7 +69,7 @@ TEST_CASE(
         s_load_order_read_error{
                                 .m_code        = s_load_order_read_error::e_code::duplicate_plugin,
                                 .m_line_number = 43,
-                                .m_plugin_name = "Fun2.esp"
+                                .m_plugin_name = "Fun2.esp"_esp
         }
     } );
 
@@ -74,14 +77,14 @@ TEST_CASE(
         s_load_order_read_error{
                                 .m_code        = s_load_order_read_error::e_code::duplicate_plugin,
                                 .m_line_number = 44,
-                                .m_plugin_name = "Fun3.esp"
+                                .m_plugin_name = "Fun3.esp"_esp
         }
     } ) );
     nested_error.insert_additional_error( s_error( v_error_details{
         s_load_order_read_error{
                                 .m_code        = s_load_order_read_error::e_code::duplicate_plugin,
                                 .m_line_number = 45,
-                                .m_plugin_name = "Fun4.esp"
+                                .m_plugin_name = "Fun4.esp"_esp
         }
     } ) );
 
@@ -89,7 +92,7 @@ TEST_CASE(
         s_load_order_read_error{
                                 .m_code        = s_load_order_read_error::e_code::duplicate_plugin,
                                 .m_line_number = 46,
-                                .m_plugin_name = "Fun5.esp"
+                                .m_plugin_name = "Fun5.esp"_esp
         }
     } ) );
 

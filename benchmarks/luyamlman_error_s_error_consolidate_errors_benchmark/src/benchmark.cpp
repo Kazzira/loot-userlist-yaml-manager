@@ -31,6 +31,7 @@ along with LOOT Userlist.yaml Manager.  If not, see
 // PROJECT INCLUDES
 /////////////////////////////////////////////////////////////////////////////
 #include "luyamlman/error/s_error.hpp"
+#include "luyamlman/types/t_plugin_name.hpp"
 
 /////////////////////////////////////////////////////////////////////////////
 // BENCHMARK INCLUDES
@@ -98,6 +99,7 @@ namespace {
 luyamlman::error::s_error
 create_test_error() noexcept
 {
+    using namespace luyamlman::literals;
     using luyamlman::error::s_error;
     using luyamlman::error_details_types::s_load_order_read_error;
 
@@ -107,7 +109,7 @@ create_test_error() noexcept
         s_load_order_read_error{
                                 .m_code        = e_code::duplicate_plugin,
                                 .m_line_number = 1,
-                                .m_plugin_name = "T"
+                                .m_plugin_name = "T"_esp
         }
     };
 }

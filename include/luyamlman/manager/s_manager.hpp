@@ -22,16 +22,25 @@ along with LOOT Userlist.yaml Manager.  If not, see
 // STANDARD LIBRARY INCLUDES
 //////////////////////////////////////////////////////////////////////////////
 #include <string_view>
-#include <vector>
 
 //////////////////////////////////////////////////////////////////////////////
 // PROJECT INCLUDES
 //////////////////////////////////////////////////////////////////////////////
 #include "luyamlman/error/s_error.hpp"
+#include "luyamlman/manager/s_data.hpp"
 #include "luyamlman/types/t_plugin_name.hpp"
 
 namespace luyamlman::manager {
 
+template <
+    template <class> typename ALoadOrderPluginVectorAllocator = std::allocator,
+    template <class> typename ALoadOrderHistoryPluginVectorAllocator
+    = std::allocator,
+    template <class> typename ALoadOrderPluginStringAllocator = std::allocator,
+    template <class> typename ALoadOrderHistoryPluginStringAllocator
+    = std::allocator,
+
+    template <class> typename ASingleUseStringAllocator = std::allocator>
 class s_manager
 {
     private:
@@ -58,8 +67,14 @@ class s_manager
         );
 
     private:
-        std::vector<std::string>                     m_owned_load_order;
-        std::vector<luyamlman::types::t_plugin_name> m_load_order;
+        luyamlman::manager::s_data<
+            ALoadOrderPluginVectorAllocator,
+            ALoadOrderHistoryPluginVectorAllocator,
+            ALoadOrderPluginStringAllocator,
+            ALoadOrderHistoryPluginStringAllocator>
+            m_data;
 };
 
 } // namespace luyamlman::manager
+
+#include "luyamlman/manager/s_manager.tpp"

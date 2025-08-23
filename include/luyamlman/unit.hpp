@@ -1,3 +1,4 @@
+#pragma once
 /*
 Copyright (C) 2024-2025 Zachary Dakota Meyer. All rights reserved.
 
@@ -17,7 +18,11 @@ You should have received a copy of the GNU General Public License
 along with LOOT Userlist.yaml Manager.  If not, see
 <http://www.gnu.org/licenses/>.
 */
-//////////////////////////////////////////////////////////////////////////////
-// PROJECT INCLUDES
-//////////////////////////////////////////////////////////////////////////////
-#include "luyamlman/manager/s_manager.hpp"
+namespace luyamlman {
+struct s_unit
+{
+};
+
+inline constexpr s_unit unit{};
+
+} // namespace luyamlman

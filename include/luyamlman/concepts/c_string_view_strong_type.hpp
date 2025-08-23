@@ -1,3 +1,4 @@
+#pragma once
 /*
 Copyright (C) 2024-2025 Zachary Dakota Meyer. All rights reserved.
 
@@ -18,6 +19,16 @@ along with LOOT Userlist.yaml Manager.  If not, see
 <http://www.gnu.org/licenses/>.
 */
 //////////////////////////////////////////////////////////////////////////////
-// PROJECT INCLUDES
+// STANDARD LIBRARY INCLUDES
 //////////////////////////////////////////////////////////////////////////////
-#include "luyamlman/manager/s_manager.hpp"
+#include <concepts>
+#include <string_view>
+
+namespace luyamlman::concepts {
+
+template <typename T>
+concept c_string_view_strong_type = requires( T t ) {
+    { t.value_of() } -> std::same_as<std::string_view &>;
+};
+
+} // namespace luyamlman::concepts

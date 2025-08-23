@@ -33,10 +33,12 @@ along with LOOT Userlist.yaml Manager.  If not, see
 /////////////////////////////////////////////////////////////////////////////
 #include "luyamlman/memory/arena_allocator.hpp"
 #include "luyamlman/memory/linear_allocator.hpp"
+#include "luyamlman/tags.hpp"
 
 template <typename T>
-using str_allocator
-    = luyamlman::memory::linear_allocator<T, struct s_string_allocator_tag>;
+using str_allocator = luyamlman::memory::linear_allocator<
+    luyamlman::tags::s_test_01,
+    luyamlman::memory::e_usage::multiple>::allocator<T>;
 
 constexpr size_t k_string_vector_size       = 128;
 constexpr size_t k_character_allocator_size = 21 * 128;
@@ -49,7 +51,7 @@ TEST_CASE(
         = std::basic_string<char, std::char_traits<char>, str_allocator<char>>;
     using str_vector = std::vector<fast_string, str_allocator<fast_string>>;
 
-    luyamlman::memory::arena_allocator::get_instance(
+    luyamlman::memory::arena_allocator<>::singleton::get_instance(
         k_string_vector_size * sizeof( std::string )
         + k_character_allocator_size
     );

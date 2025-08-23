@@ -1,3 +1,4 @@
+#pragma once
 /*
 Copyright (C) 2024-2025 Zachary Dakota Meyer. All rights reserved.
 
@@ -18,6 +19,44 @@ along with LOOT Userlist.yaml Manager.  If not, see
 <http://www.gnu.org/licenses/>.
 */
 //////////////////////////////////////////////////////////////////////////////
-// PROJECT INCLUDES
+// STANDARD LIBRARY INCLUDES
 //////////////////////////////////////////////////////////////////////////////
-#include "luyamlman/manager/s_manager.hpp"
+#include <mutex>
+#include <optional>
+
+namespace luyamlman::memory {
+
+template <typename T>
+class singleton
+{
+    public:
+        template <typename... AArgs>
+        static T&
+        get_instance(
+            AArgs&&... a_args
+        )
+        {
+            if( !m_instance.has_value() )
+            {
+                std::lock_guard<std::mutex> lock( m_mutex );
+
+                if( !m_instance.has_value() )
+                {
+                    m_instance.emplace( std::forward<AArgs&&>( a_args )... );
+                }
+            }
+
+            return *m_instance;
+        }
+
+        static void
+        reset_instance() noexcept
+        {
+            m_instance.reset();
+        }
+
+    private:
+        inline static std::optional<T> m_instance;
+        inline static std::mutex       m_mutex;
+};
+} // namespace luyamlman::memory

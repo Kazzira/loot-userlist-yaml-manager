@@ -26,12 +26,14 @@ along with LOOT Userlist.yaml Manager.  If not, see
 //////////////////////////////////////////////////////////////////////////////
 // THIRD PARTY INCLUDES
 //////////////////////////////////////////////////////////////////////////////
+#include <strong_type/equality.hpp>
 #include <strong_type/formattable.hpp>
 #include <strong_type/hashable.hpp>
 #include <strong_type/indexed.hpp>
 #include <strong_type/iostreamable.hpp>
 #include <strong_type/ordered.hpp>
 #include <strong_type/strong_type.hpp>
+#include <strong_type/type.hpp>
 
 namespace luyamlman::types {
 
@@ -43,7 +45,9 @@ using t_plugin_name = strong::type<
     strong::indexed<>,
     strong::ostreamable,
     strong::ordered,
-    strong::partially_ordered>;
+    strong::partially_ordered,
+    strong::equality,
+    strong::default_constructible>;
 
 } // namespace luyamlman::types
 
@@ -70,7 +74,9 @@ template class strong::type<
     strong::indexed<>,
     strong::ostreamable,
     strong::ordered,
-    strong::partially_ordered>;
+    strong::partially_ordered,
+    strong::equality,
+    strong::default_constructible>;
 
 #else
 extern template struct strong::indexed<>;
@@ -82,5 +88,7 @@ extern template class strong::type<
     strong::indexed<>,
     strong::ostreamable,
     strong::ordered,
-    strong::partially_ordered>;
+    strong::partially_ordered,
+    strong::equality,
+    strong::default_constructible>;
 #endif

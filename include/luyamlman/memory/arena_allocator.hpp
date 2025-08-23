@@ -22,9 +22,17 @@ along with LOOT Userlist.yaml Manager.  If not, see
 // STANDARD LIBRARY INCLUDES
 //////////////////////////////////////////////////////////////////////////////
 #include <cstddef>
-#include <new>
+#include <optional>
+
+//////////////////////////////////////////////////////////////////////////////
+// PROJECT INCLUDES
+//////////////////////////////////////////////////////////////////////////////
+#include "luyamlman/memory/singleton.hpp"
+#include "luyamlman/tags.hpp"
 
 namespace luyamlman::memory {
+
+template <typename ATag = luyamlman::tags::s_default>
 class arena_allocator
 {
     public:
@@ -32,73 +40,42 @@ class arena_allocator
         using difference_type = std::ptrdiff_t;
         using value_type      = std::byte;
         using pointer         = std::byte*;
+        using singleton = luyamlman::memory::singleton<arena_allocator<ATag>>;
 
     public:
-        static arena_allocator&
-        get_instance(
-            size_t a_arena_size = 32 * 1024 * 1024
-        ) noexcept
-        {
-            static arena_allocator instance( a_arena_size );
-            return instance;
-        }
-
-    private:
-        arena_allocator(
-            size_t a_arena_size
-        ) noexcept
-        {
-            m_arena_start = new std::byte[a_arena_size];
-            m_arena_size  = a_arena_size;
-            m_arena_used  = 0;
-        }
+        inline arena_allocator() = default;
+        inline arena_allocator( size_t a_arena_size );
 
     public:
-        void*
-        allocate(
-            size_t a_size
-        )
-        {
-            const size_t alignment = alignof( std::byte );
-            const size_t current_address
-                = reinterpret_cast<size_t>( m_arena_start ) + m_arena_used;
-            const size_t padding = [&]() -> size_t
-            {
-                if( current_address % alignment == 0 )
-                {
-                    return 0;
-                }
+        inline ~arena_allocator() noexcept;
 
-                return alignment - ( current_address % alignment );
-            }();
+        // Deleting moves and copies because this is just
+        // memory.
 
-            if( m_arena_used + a_size + padding > m_arena_size )
-            {
-                throw std::bad_alloc{};
-            }
+        inline arena_allocator( const arena_allocator& ) = delete;
 
-            void* allocated_memory  = m_arena_start + m_arena_used + padding;
-            m_arena_used           += a_size + padding;
-            return allocated_memory;
-        }
+        inline arena_allocator( arena_allocator&& )      = delete;
 
-        void
-        reset() noexcept
-        {
-            m_arena_used = 0;
-        }
+        inline arena_allocator&
+        operator=( const arena_allocator& )
+            = delete;
+
+        inline arena_allocator&
+        operator=( arena_allocator&& )
+            = delete;
+
+    public:
+        inline void*
+        allocate( size_t a_size );
+
+        inline void
+        reset() noexcept;
 
         size_t
-        arena_used() const noexcept
-        {
-            return m_arena_used;
-        }
+        arena_used() const noexcept;
 
         size_t
-        arena_size() const noexcept
-        {
-            return m_arena_size;
-        }
+        arena_size() const noexcept;
 
     private:
         std::byte* m_arena_start{ nullptr };
@@ -106,3 +83,5 @@ class arena_allocator
         size_t     m_arena_used{ 0 };
 };
 } // namespace luyamlman::memory
+
+#include "luyamlman/memory/arena_allocator.inl"
