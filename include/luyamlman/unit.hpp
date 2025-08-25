@@ -19,10 +19,17 @@ along with LOOT Userlist.yaml Manager.  If not, see
 <http://www.gnu.org/licenses/>.
 */
 namespace luyamlman {
+
+/**
+ * @brief A type that represents exactly one value.
+ */
 struct s_unit
 {
 };
 
+/**
+ * @brief An instance of s_unit.
+ */
 inline constexpr s_unit unit{};
 
 } // namespace luyamlman
