@@ -23,13 +23,16 @@ along with LOOT Userlist.yaml Manager.  If not, see
 //////////////////////////////////////////////////////////////////////////////
 #include "luyamlman/memory/arena_allocator.hpp"
 #include "luyamlman/memory/linear_allocator.hpp"
+#include "luyamlman/raii/s_scoped_global_allocator_handler.hpp"
 #include "luyamlman/tags.hpp"
 
 namespace luyamlman::raii {
 
-struct s_scoped_global_allocator_handler
+struct s_application_global_allocator_handler
+    : s_scoped_global_allocator_handler
 {
-        s_scoped_global_allocator_handler() noexcept = default;
-        ~s_scoped_global_allocator_handler() noexcept;
+        s_application_global_allocator_handler() noexcept = default;
+        ~s_application_global_allocator_handler() noexcept;
 };
+
 } // namespace luyamlman::raii

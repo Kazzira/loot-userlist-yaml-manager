@@ -4,6 +4,7 @@ add_library(
     "${ROOT_DIR}/src/error/s_error.cpp"
     "${ROOT_DIR}/src/manager/load_order_parser.cpp"
     "${ROOT_DIR}/src/manager/s_manager.cpp"
+    "${ROOT_DIR}/src/raii/s_application_global_allocator_handler.cpp"
     "${ROOT_DIR}/src/types/t_loot_group_name.cpp"
     "${ROOT_DIR}/src/types/t_plugin_name.cpp"
 )
