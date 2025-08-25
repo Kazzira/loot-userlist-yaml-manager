@@ -20,40 +20,102 @@ along with LOOT Userlist.yaml Manager.  If not, see
 */
 namespace luyamlman::tags {
 
+/**
+ * @struct s_default
+ * @brief The default tag type for arena_allocator and other allocators.
+ */
 struct s_default;
 
+/**
+ * @struct s_load_order_history_strings
+ * @brief Tag type for load order history char allocator.
+ */
 struct s_load_order_history_strings;
+
+/**
+ * @struct s_load_order_strings
+ * @brief Tag type for load order char allocator.
+ */
 struct s_load_order_strings;
+
+/**
+ * @struct s_load_order_history_vector
+ * @brief Tag type for load order history t_plugin_name vector allocator.
+ */
 struct s_load_order_history_vector;
+
+/**
+ * @struct s_load_order_vector
+ * @brief Tag type for load order t_plugin_name vector allocator.
+ */
 struct s_load_order_vector;
 
+//
+// Test Tags...
+//
+
+//! Test Tag 01
 struct s_test_01;
+//! Test Tag 02
 struct s_test_02;
+//! Test Tag 03
 struct s_test_03;
+//! Test Tag 04
 struct s_test_04;
+//! Test Tag 05
 struct s_test_05;
+//! Test Tag 06
 struct s_test_06;
+//! Test Tag 07
 struct s_test_07;
+//! Test Tag 08
 struct s_test_08;
+//! Test Tag 09
 struct s_test_09;
 
+//
+// Benchmarking Tags...
+//
+
+//! Benchmark Tag 01
 struct s_benchmark_01;
+//! Benchmark Tag 02
 struct s_benchmark_02;
+//! Benchmark Tag 03
 struct s_benchmark_03;
+//! Benchmark Tag 04
 struct s_benchmark_04;
+//! Benchmark Tag 05
 struct s_benchmark_05;
+//! Benchmark Tag 06
 struct s_benchmark_06;
+//! Benchmark Tag 07
 struct s_benchmark_07;
+//! Benchmark Tag 08
 struct s_benchmark_08;
+//! Benchmark Tag 09
 struct s_benchmark_09;
 
+//
+// ADDITIONAL ARENAS
+// Although I do not think this is needed at all.
+//
+
+//! Arena Tag 2
 struct s_arena_02;
+//! Arena Tag 3
 struct s_arena_03;
+//! Arena Tag 4
 struct s_arena_04;
+//! Arena Tag 5
 struct s_arena_05;
+//! Arena Tag 6
 struct s_arena_06;
+//! Arena Tag 7
 struct s_arena_07;
+//! Arena Tag 8
 struct s_arena_08;
+//! Arena Tag 9
 struct s_arena_09;
 
 } // namespace luyamlman::tags
