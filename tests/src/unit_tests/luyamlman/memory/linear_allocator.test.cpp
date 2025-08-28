@@ -33,6 +33,7 @@ along with LOOT Userlist.yaml Manager.  If not, see
 /////////////////////////////////////////////////////////////////////////////
 #include "luyamlman/memory/arena_allocator.hpp"
 #include "luyamlman/memory/linear_allocator.hpp"
+#include "luyamlman/raii/s_scoped_global_allocator_handler.hpp"
 #include "luyamlman/tags.hpp"
 
 template <typename T>
@@ -43,22 +44,44 @@ using str_allocator = luyamlman::memory::linear_allocator<
 constexpr size_t k_string_vector_size       = 128;
 constexpr size_t k_character_allocator_size = 21 * 128;
 
+using fast_string
+    = std::basic_string<char, std::char_traits<char>, str_allocator<char>>;
+using str_vector = std::vector<fast_string, str_allocator<fast_string>>;
+
+class s_str_allocator_handler
+    : public luyamlman::raii::s_scoped_global_allocator_handler
+{
+    public:
+        s_str_allocator_handler(
+            size_t a_arena_size = k_string_vector_size * sizeof( std::string )
+                                + k_character_allocator_size,
+            size_t a_str_allocator_char_size   = k_character_allocator_size,
+            size_t a_str_allocator_string_size = k_string_vector_size
+        )
+        {
+            luyamlman::memory::arena_allocator<>::singleton::get_instance(
+                a_arena_size
+            );
+            str_allocator<fast_string>::intitialize( a_str_allocator_string_size
+            );
+            str_allocator<char>::intitialize( a_str_allocator_char_size );
+        }
+
+        ~s_str_allocator_handler()
+        {
+            str_allocator<fast_string>::reset_allocator();
+            str_allocator<char>::reset_allocator();
+            luyamlman::memory::arena_allocator<>::singleton::reset_instance();
+        }
+};
+
 TEST_CASE(
     "luyamlman::memory::linear_allocator: Test vector and std::string.",
 )
 {
-    using fast_string
-        = std::basic_string<char, std::char_traits<char>, str_allocator<char>>;
-    using str_vector = std::vector<fast_string, str_allocator<fast_string>>;
+    const s_str_allocator_handler handler;
 
-    luyamlman::memory::arena_allocator<>::singleton::get_instance(
-        k_string_vector_size * sizeof( std::string )
-        + k_character_allocator_size
-    );
-    str_allocator<fast_string>::intitialize( k_string_vector_size );
-    str_allocator<char>::intitialize( k_character_allocator_size );
-
-    str_vector vec;
+    str_vector                    vec;
     vec.reserve( 128 );
 
     CHECK( str_allocator<fast_string>::used() == sizeof( fast_string ) * 128 );

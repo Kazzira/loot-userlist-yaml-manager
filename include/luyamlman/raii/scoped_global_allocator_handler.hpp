@@ -21,15 +21,26 @@ along with LOOT Userlist.yaml Manager.  If not, see
 //////////////////////////////////////////////////////////////////////////////
 // PROJECT INCLUDES
 //////////////////////////////////////////////////////////////////////////////
-#include "luyamlman/raii/s_scoped_global_allocator_handler.hpp"
+#include "luyamlman/memory/arena_allocator.hpp"
+#include "luyamlman/memory/linear_allocator.hpp"
+#include "luyamlman/tags.hpp"
 
 namespace luyamlman::raii {
 
-struct s_application_global_allocator_handler
-    : s_scoped_global_allocator_handler
+/**
+ * @brief A scoped handler for the global allocators.
+ *
+ * Subclass this and instantiate an object of the subclass, but do NOT
+ * define any member variables as this will be instaniated by value and
+ * I do not want any slicing to occur.
+ *
+ * For now this is just a polymorphic base class, but in the future this
+ * should be done, possibly using templates.
+ */
+struct s_scoped_global_allocator_handler
 {
-        s_application_global_allocator_handler() noexcept = default;
-        ~s_application_global_allocator_handler() noexcept;
-};
+        s_scoped_global_allocator_handler() noexcept          = default;
 
+        virtual ~s_scoped_global_allocator_handler() noexcept = default;
+};
 } // namespace luyamlman::raii
