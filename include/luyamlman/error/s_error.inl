@@ -23,90 +23,104 @@ along with LOOT Userlist.yaml Manager.  If not, see
 //////////////////////////////////////////////////////////////////////////////
 #include "luyamlman/error/s_error.hpp"
 
-luyamlman::error::s_error::s_error(
+template <template <class> typename AAllocator>
+luyamlman::error::s_error<AAllocator>::s_error(
     luyamlman::error::v_error_details a_details
 ) noexcept
     : m_details( std::move( a_details ) )
 {
 }
 
-luyamlman::error::s_error::iterator
-luyamlman::error::s_error::begin() noexcept
+template <template <class> typename AAllocator>
+luyamlman::error::s_error<AAllocator>::iterator
+luyamlman::error::s_error<AAllocator>::begin() noexcept
 {
     return m_additional_errors.begin();
 }
 
-luyamlman::error::s_error::const_iterator
-luyamlman::error::s_error::begin() const noexcept
+template <template <class> typename AAllocator>
+luyamlman::error::s_error<AAllocator>::const_iterator
+luyamlman::error::s_error<AAllocator>::begin() const noexcept
 {
     return m_additional_errors.begin();
 }
 
-luyamlman::error::s_error::iterator
-luyamlman::error::s_error::end() noexcept
+template <template <class> typename AAllocator>
+luyamlman::error::s_error<AAllocator>::iterator
+luyamlman::error::s_error<AAllocator>::end() noexcept
 {
     return m_additional_errors.end();
 }
 
-luyamlman::error::s_error::const_iterator
-luyamlman::error::s_error::end() const noexcept
+template <template <class> typename AAllocator>
+luyamlman::error::s_error<AAllocator>::const_iterator
+luyamlman::error::s_error<AAllocator>::end() const noexcept
 {
     return m_additional_errors.end();
 }
 
-luyamlman::error::s_error::reverse_iterator
-luyamlman::error::s_error::rbegin() noexcept
+template <template <class> typename AAllocator>
+luyamlman::error::s_error<AAllocator>::reverse_iterator
+luyamlman::error::s_error<AAllocator>::rbegin() noexcept
 {
     return m_additional_errors.rbegin();
 }
 
-luyamlman::error::s_error::const_reverse_iterator
-luyamlman::error::s_error::rbegin() const noexcept
+template <template <class> typename AAllocator>
+luyamlman::error::s_error<AAllocator>::const_reverse_iterator
+luyamlman::error::s_error<AAllocator>::rbegin() const noexcept
 {
     return m_additional_errors.rbegin();
 }
 
-luyamlman::error::s_error::reverse_iterator
-luyamlman::error::s_error::rend() noexcept
+template <template <class> typename AAllocator>
+luyamlman::error::s_error<AAllocator>::reverse_iterator
+luyamlman::error::s_error<AAllocator>::rend() noexcept
 {
     return m_additional_errors.rend();
 }
 
-luyamlman::error::s_error::const_reverse_iterator
-luyamlman::error::s_error::rend() const noexcept
+template <template <class> typename AAllocator>
+luyamlman::error::s_error<AAllocator>::const_reverse_iterator
+luyamlman::error::s_error<AAllocator>::rend() const noexcept
 {
     return m_additional_errors.rend();
 }
 
+template <template <class> typename AAllocator>
 bool
-luyamlman::error::s_error::empty() const noexcept
+luyamlman::error::s_error<AAllocator>::empty() const noexcept
 {
     return m_additional_errors.empty();
 }
 
+template <template <class> typename AAllocator>
 size_t
-luyamlman::error::s_error::size() const noexcept
+luyamlman::error::s_error<AAllocator>::size() const noexcept
 {
     return m_additional_errors.size() + 1;
 }
 
+template <template <class> typename AAllocator>
 const luyamlman::error::v_error_details&
-luyamlman::error::s_error::details() const noexcept
+luyamlman::error::s_error<AAllocator>::details() const noexcept
 {
     return m_details;
 }
 
+template <template <class> typename AAllocator>
 void
-luyamlman::error::s_error::return_value(
+luyamlman::error::s_error<AAllocator>::return_value(
     std::any a_return_value
 ) noexcept
 {
     m_return_value = std::move( a_return_value );
 }
 
+template <template <class> typename AAllocator>
 template <typename T>
 std::optional<T>
-luyamlman::error::s_error::return_value_as() noexcept
+luyamlman::error::s_error<AAllocator>::return_value_as() noexcept
 {
     if( !m_return_value.has_value() )
     {
@@ -123,10 +137,32 @@ luyamlman::error::s_error::return_value_as() noexcept
     return std::nullopt;
 }
 
+template <template <class> typename AAllocator>
 void
-luyamlman::error::s_error::insert_additional_error(
+luyamlman::error::s_error<AAllocator>::insert_additional_error(
     s_error a_error
 )
 {
     m_additional_errors.push_back( std::move( a_error ) );
+}
+
+template <template <class> typename AAllocator>
+void
+luyamlman::error::s_error<AAllocator>::consolidate_errors() noexcept
+{
+    for( auto& error : m_additional_errors )
+    {
+        if( error.m_additional_errors.empty() )
+        {
+            continue;
+        }
+
+        error.consolidate_errors();
+
+        //
+        // Will need to test to make sure that iterators work correctly here.
+        //
+        m_additional_errors
+            .splice( m_additional_errors.end(), error.m_additional_errors );
+    }
 }

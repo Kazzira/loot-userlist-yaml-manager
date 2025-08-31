@@ -50,10 +50,14 @@ namespace luyamlman::manager {
 template <
     template <class> typename AVectorAllocator         = std::allocator,
     template <class> typename ACharAllocator           = std::allocator,
-    template <class> typename ATempStringCharAllocator = std::allocator>
-result<std::vector<
-    luyamlman::types::t_plugin_name,
-    AVectorAllocator<luyamlman::types::t_plugin_name>>>
+    template <class> typename ATempStringCharAllocator = std::allocator,
+    template <class> typename AStringViewSetAllocator  = std::allocator,
+    template <class> typename AErrorListAllocator      = std::allocator>
+result<
+    std::vector<
+        luyamlman::types::t_plugin_name,
+        AVectorAllocator<luyamlman::types::t_plugin_name>>,
+    AErrorListAllocator>
 parse_load_order_file( std::string_view a_load_order_file_path );
 
 } // namespace luyamlman::manager

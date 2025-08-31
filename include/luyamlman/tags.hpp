@@ -27,6 +27,12 @@ namespace luyamlman::tags {
 struct s_default;
 
 /**
+ * @struct s_error_list
+ * @brief Tag type for error list allocator.
+ */
+struct s_error_list;
+
+/**
  * @struct s_load_order_history_strings
  * @brief Tag type for load order history char allocator.
  */
@@ -49,6 +55,12 @@ struct s_load_order_history_vector;
  * @brief Tag type for load order t_plugin_name vector allocator.
  */
 struct s_load_order_vector;
+
+/**
+ * @struct s_plugin_name_set
+ * @brief Tag type for plugin name set allocator.
+ */
+struct s_plugin_name_set;
 
 //
 // Test Tags...

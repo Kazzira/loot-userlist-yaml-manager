@@ -18,23 +18,16 @@ You should have received a copy of the GNU General Public License
 along with LOOT Userlist.yaml Manager.  If not, see
 <http://www.gnu.org/licenses/>.
 */
+//////////////////////////////////////////////////////////////////////////////
+// PROJECT INCLUDES
+//////////////////////////////////////////////////////////////////////////////
+#include "luyamlman/error/s_error.hpp"
+#include "luyamlman/types/t_plugin_name.hpp"
 
-////////////////////////////////////////////////////////////////////////////////
-// STANDARD LIBRARY INCLUDES
-////////////////////////////////////////////////////////////////////////////////
-#include <compare>
+//////////////////////////////////////////////////////////////////////////////
+// BENCHMARK INCLUDES
+//////////////////////////////////////////////////////////////////////////////
 
-namespace luyamlman::error_details_types {
+namespace benchmark {
 
-struct s_allocation_failure
-{
-        bool
-        operator!=( const s_allocation_failure& ) const noexcept
-            = default;
-
-        std::partial_ordering
-        operator<=>( const s_allocation_failure& ) const noexcept
-            = default;
-};
-
-} // namespace luyamlman::error_details_types
+}

@@ -1,0 +1,172 @@
+# Used for benchmark
+
+Skyrim.esm
+Update.esm
+Dawnguard.esm
+HearthFires.esm
+Dragonborn.esm
+ccasvsse001-almsivi.esm
+ccBGSSSE001-Fish.esm
+ccbgssse002-exoticarrows.esl
+ccbgssse003-zombies.esl
+ccbgssse004-ruinsedge.esl
+ccbgssse005-goldbrand.esl
+ccbgssse006-stendarshammer.esl
+ccbgssse007-chrysamere.esl
+ccbgssse010-petdwarvenarmoredmudcrab.esl
+ccbgssse011-hrsarmrelvn.esl
+ccbgssse012-hrsarmrstl.esl
+ccbgssse014-spellpack01.esl
+ccbgssse019-staffofsheogorath.esl
+ccbgssse020-graycowl.esl
+ccbgssse021-lordsmail.esl
+ccmtysse001-knightsofthenine.esl
+ccQDRSSE001-SurvivalMode.esl
+cctwbsse001-puzzledungeon.esm
+cceejsse001-hstead.esm
+ccqdrsse002-firewood.esl
+ccbgssse018-shadowrend.esl
+ccbgssse035-petnhound.esl
+ccfsvsse001-backpacks.esl
+cceejsse002-tower.esl
+ccedhsse001-norjewel.esl
+ccvsvsse002-pets.esl
+ccBGSSSE037-Curios.esl
+ccbgssse034-mntuni.esl
+ccbgssse045-hasedoki.esl
+ccbgssse008-wraithguard.esl
+ccbgssse036-petbwolf.esl
+ccffbsse001-imperialdragon.esl
+ccmtysse002-ve.esl
+ccbgssse043-crosselv.esl
+ccvsvsse001-winter.es
+cceejsse003-hollow.esl
+ccbgssse016-umbra.esm
+ccbgssse031-advcyrus.esm
+ccbgssse038-bowofshadows.esl
+ccbgssse040-advobgobs.esl
+ccbgssse050-ba_daedric.esl
+ccbgssse052-ba_iron.esl
+ccbgssse054-ba_orcish.esl
+ccbgssse058-ba_steel.esl
+ccbgssse059-ba_dragonplate.esl
+ccbgssse061-ba_dwarven.esl
+ccpewsse002-armsofchaos.esl
+ccbgssse041-netchleather.esl
+ccedhsse002-splkntset.esl
+ccbgssse064-ba_elven.esl
+ccbgssse063-ba_ebony.esl
+ccbgssse062-ba_dwarvenmail.esl
+ccbgssse060-ba_dragonscale.esl
+ccbgssse056-ba_silver.esl
+ccbgssse055-ba_orcishscaled.esl
+ccbgssse053-ba_leather.esl
+ccbgssse051-ba_daedricmail.esl
+ccbgssse057-ba_stalhrim.esl
+ccbgssse066-staves.esl
+ccbgssse067-daedinv.esm
+ccbgssse068-bloodfall.esl
+ccbgssse069-contest.esl
+ccvsvsse003-necroarts.esl
+ccvsvsse004-beafarmer.esl
+ccBGSSSE025-AdvDSGS.esm
+ccffbsse002-crossbowpack.esl
+ccbgssse013-dawnfang.esl
+ccrmssse001-necrohouse.esl
+ccedhsse003-redguard.esl
+cceejsse004-hall.esl
+cceejsse005-cave.esm
+cckrtsse001_altar.esl
+cccbhsse001-gaunt.esl
+ccafdsse001-dwesanctuary.esm
+_ResourcePack.esl
+Test Plugin 001.esp
+Test Plugin 002.esp
+Test Plugin 003.esp
+Test Plugin 004.esp
+Test Plugin 005.esp
+Test Plugin 006.esp
+Test Plugin 007.esp
+Test Plugin 008.esp
+Test Plugin 009.esp
+Test Plugin 010.esp
+Test Plugin 011.esp
+Test Plugin 012.esp
+Test Plugin 013.esp
+Test Plugin 014.esp
+Test Plugin 015.esp
+Test Plugin 016.esp
+Test Plugin 017.esp
+Test Plugin 018.esp
+Test Plugin 019.esp
+Test Plugin 020.esp
+Test Plugin 021.esp
+Test Plugin 022.esp
+Test Plugin 023.esp
+Test Plugin 024.esp
+Test Plugin 025.esp
+Test Plugin 026.esp
+Test Plugin 027.esp
+Test Plugin 028.esp
+Test Plugin 029.esp
+Test Plugin 030.esp
+Test Plugin 031.esp
+Test Plugin 032.esp
+Test Plugin 033.esp
+Test Plugin 034.esp
+Test Plugin 035.esp
+Test Plugin 036.esp
+Test Plugin 037.esp
+Test Plugin 038.esp
+Test Plugin 039.esp
+Test Plugin 040.esp
+Test Plugin 041.esp
+Test Plugin 042.esp
+Test Plugin 043.esp
+Test Plugin 044.esp
+Test Plugin 045.esp
+Test Plugin 046.esp
+Test Plugin 047.esp
+Test Plugin 048.esp
+Test Plugin 049.esp
+Test Plugin 050.esp
+Test Plugin 051.esp
+Test Plugin 052.esp
+Test Plugin 053.esp
+Test Plugin 054.esp
+Test Plugin 055.esp
+Test Plugin 056.esp
+Test Plugin 057.esp
+Test Plugin 058.esp
+Test Plugin 059.esp
+Test Plugin 060.esp
+Test Plugin 061.esp
+Test Plugin 062.esp
+Test Plugin 063.esp
+Test Plugin 064.esp
+Test Plugin 065.esp
+Test Plugin 066.esp
+Test Plugin 067.esp
+Test Plugin 068.esp
+Test Plugin 069.esp
+Test Plugin 070.esp
+Test Plugin 071.esp
+Test Plugin 072.esp
+Test Plugin 073.esp
+Test Plugin 074.esp
+Test Plugin 075.esp
+Test Plugin 076.esp
+Test Plugin 077.esp
+Test Plugin 078.esp
+Test Plugin 079.esp
+Test Plugin 080.esp
+Test Plugin 081.esp
+Test Plugin 082.esp
+Test Plugin 083.esp
+Test Plugin 084.esp
+Test Plugin 085.esp
+Test Plugin 086.esp
+Test Plugin 087.esp
+Test Plugin 088.esp
+Test Plugin 089.esp
+Test Plugin 090.esp

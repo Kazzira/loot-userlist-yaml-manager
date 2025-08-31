@@ -1,3 +1,4 @@
+#pragma once
 /*
 Copyright (C) 2024-2025 Zachary Dakota Meyer. All rights reserved.
 
@@ -20,32 +21,30 @@ along with LOOT Userlist.yaml Manager.  If not, see
 //////////////////////////////////////////////////////////////////////////////
 // STANDARD LIBRARY INCLUDES
 //////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////
-// PROJECT INCLUDES
-//////////////////////////////////////////////////////////////////////////////
-#include "luyamlman/error/s_error.hpp"
+#include <exception>
+#include <string>
 
 namespace luyamlman::error {
 
-void
-s_error::consolidate_errors() noexcept
+class alloc_fail : public std::exception
 {
-    for( auto& error : m_additional_errors )
-    {
-        if( error.m_additional_errors.empty() )
+    public:
+        alloc_fail(
+            std::string a_what
+        )
+            : std::exception{}
+            , m_what{ std::move( a_what ) }
         {
-            continue;
         }
 
-        error.consolidate_errors();
+        const char*
+        what() const noexcept override
+        {
+            return m_what.c_str();
+        }
 
-        //
-        // Will need to test to make sure that iterators work correctly here.
-        //
-        m_additional_errors
-            .splice( m_additional_errors.end(), error.m_additional_errors );
-    }
-}
+    private:
+        std::string m_what;
+};
 
 } // namespace luyamlman::error

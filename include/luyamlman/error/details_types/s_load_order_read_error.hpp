@@ -41,6 +41,14 @@ struct s_load_order_read_error
         meta_enum_class( e_code, uint32_t, duplicate_plugin ) using error_code
             = e_code;
 
+        bool
+        operator!=( const s_load_order_read_error& ) const noexcept
+            = default;
+
+        std::partial_ordering
+        operator<=>( const s_load_order_read_error& ) const noexcept
+            = default;
+
         error_code                      m_code;
         uint32_t                        m_line_number;
         luyamlman::types::t_plugin_name m_plugin_name;

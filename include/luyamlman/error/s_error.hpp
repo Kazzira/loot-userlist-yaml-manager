@@ -43,6 +43,7 @@ namespace luyamlman::error {
  * This class is the error type used in `luyamlman::result<T>`, which itself
  * is an alias for `std::expected<T, luyamlman::error::s_error>`
  */
+template <template <class> class AAllocator = std::allocator>
 class s_error
 {
     public:
@@ -88,6 +89,15 @@ class s_error
         size() const noexcept;
 
     public:
+        bool
+        operator!=( const s_error& ) const noexcept
+            = default;
+
+        std::partial_ordering
+        operator<=>( const s_error& ) const noexcept
+            = default;
+
+    public:
         inline const luyamlman::error::v_error_details&
         details() const noexcept;
 
@@ -99,23 +109,23 @@ class s_error
         return_value_as() noexcept;
 
     public:
-        void
+        inline void
         consolidate_errors() noexcept;
 
         inline void
         insert_additional_error( s_error a_error );
 
     private:
-        luyamlman::error::v_error_details m_details;
-        std::list<s_error>                m_additional_errors;
-        std::optional<std::any>           m_return_value;
+        luyamlman::error::v_error_details       m_details;
+        std::list<s_error, AAllocator<s_error>> m_additional_errors;
+        std::optional<std::any>                 m_return_value;
 };
 } // namespace luyamlman::error
 
 namespace luyamlman {
 
-template <typename T>
-using result = std::expected<T, luyamlman::error::s_error>;
+template <typename T, template <class> typename AAllocator = std::allocator>
+using result = std::expected<T, luyamlman::error::s_error<AAllocator>>;
 
 template <typename T>
 using result_jsondumped = std::expected<T, std::string>;

@@ -27,6 +27,14 @@ namespace luyamlman::error_details_types {
 
 struct s_filesystem_error
 {
+        bool
+        operator!=( const s_filesystem_error& ) const noexcept
+            = default;
+
+        std::partial_ordering
+        operator<=>( const s_filesystem_error& ) const noexcept
+            = default;
+
         std::filesystem::path m_path;
 };
 

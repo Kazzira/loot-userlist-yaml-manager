@@ -38,6 +38,7 @@ along with LOOT Userlist.yaml Manager.  If not, see
 
 template <typename T>
 using str_allocator = luyamlman::memory::linear_allocator<
+    luyamlman::tags::s_default,
     luyamlman::tags::s_test_01,
     luyamlman::memory::e_usage::multiple>::allocator<T>;
 

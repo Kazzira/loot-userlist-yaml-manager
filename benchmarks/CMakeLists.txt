@@ -4,6 +4,8 @@
 find_package(Catch2 REQUIRED CONFIG)
 find_package(strong_type REQUIRED CONFIG)
 
+add_compile_definitions(TEST_DATA_DIR="${ROOT_DIR}/tests/data")
+
 # ----------------------------------------------------------------------------
 # luyamlman::error::s_error::consolidate_errors
 # luyamlman_error_s_error_consolidate_errors_benchmark
@@ -27,3 +29,26 @@ target_link_libraries(
     Catch2::Catch2WithMain
 )
 # ----------------------------------------------------------------------------
+
+# ----------------------------------------------------------------------------
+# luyamlman::manager::load_order_parser::parse_load_order
+# luyamlman_manager_parse_load_order_benchmark
+# ----------------------------------------------------------------------------
+add_executable(
+    luyamlman_manager_parse_load_order_benchmark
+    "${ROOT_DIR}/benchmarks/luyamlman_load_order_parser_benchmark/src/benchmark.cpp"
+)
+
+target_include_directories(
+    luyamlman_manager_parse_load_order_benchmark
+    PUBLIC
+    "${ROOT_DIR}/benchmarks/luyamlman_load_order_parser_benchmark/include"
+)
+
+target_link_libraries(
+    luyamlman_manager_parse_load_order_benchmark
+    PRIVATE
+    luyamlman
+    strong_type::strong_type
+    Catch2::Catch2WithMain
+)

@@ -41,16 +41,16 @@ along with LOOT Userlist.yaml Manager.  If not, see
 
 namespace {
 
-luyamlman::error::s_error
-                          create_test_error() noexcept;
+luyamlman::error::s_error<>
+                            create_test_error() noexcept;
 
-luyamlman::error::s_error create_test_error_nested(
+luyamlman::error::s_error<> create_test_error_nested(
     benchmark::types::t_depth,
     benchmark::types::t_children
 );
 
 void
-walk_through_all_errors( const luyamlman::error::s_error& error ) noexcept;
+walk_through_all_errors( const luyamlman::error::s_error<>& error ) noexcept;
 
 } // namespace
 
@@ -96,7 +96,7 @@ TEST_CASE(
 
 namespace {
 
-luyamlman::error::s_error
+luyamlman::error::s_error<>
 create_test_error() noexcept
 {
     using namespace luyamlman::literals;
@@ -114,7 +114,7 @@ create_test_error() noexcept
     };
 }
 
-luyamlman::error::s_error
+luyamlman::error::s_error<>
 create_test_error_nested(
     benchmark::types::t_depth    a_depth,
     benchmark::types::t_children a_number_of_children
@@ -145,13 +145,13 @@ create_test_error_nested(
 
 void
 walk_through_all_errors(
-    const luyamlman::error::s_error& error
+    const luyamlman::error::s_error<>& error
 ) noexcept
 {
     using luyamlman::error::s_error;
 
     // Walk through the main error.
-    const s_error* current_error = &error;
+    const s_error<>* current_error = &error;
 
     if( !current_error->empty() )
     {

@@ -128,7 +128,7 @@ luyamlman::manager::s_data<
             }
         )
         .or_else(
-            [this]( luyamlman::error::s_error a_error
+            [this]( luyamlman::error::s_error<> a_error
             ) -> luyamlman::result<void>
             {
                 a_error.return_value_as<t_load_order_plugin_vector>().and_then(
@@ -174,7 +174,7 @@ luyamlman::manager::s_data<
             }
         )
         .or_else(
-            [this]( luyamlman::error::s_error a_error )
+            [this]( luyamlman::error::s_error<> a_error )
             {
                 a_error.return_value_as<t_load_order_history_plugin_vector>()
                     .and_then(

@@ -22,14 +22,17 @@ along with LOOT Userlist.yaml Manager.  If not, see
 // STANDARD LIBRARY INCLUDES
 //////////////////////////////////////////////////////////////////////////////
 #include <cstddef>
+#include <format>
 #include <new>
 #include <stdexcept>
 
 //////////////////////////////////////////////////////////////////////////////
 // PROJECT INCLUDES
 //////////////////////////////////////////////////////////////////////////////
+#include "luyamlman/error/alloc_fail.hpp"
 #include "luyamlman/memory/arena_allocator.hpp"
 #include "luyamlman/memory/singleton.hpp"
+#include "luyamlman/tags.hpp"
 
 namespace luyamlman::memory {
 
@@ -39,7 +42,10 @@ enum class e_usage
     multiple
 };
 
-template <typename ATag = struct s_default, e_usage AUsage = e_usage::multiple>
+template <
+    typename ArenaTag = luyamlman::tags::s_default,
+    typename ATag     = luyamlman::tags::s_default,
+    e_usage AUsage    = e_usage::multiple>
 struct linear_allocator
 {
         template <typename T>
@@ -58,6 +64,12 @@ struct linear_allocator
                 allocator() noexcept {}
 
             public:
+                bool operator !=( const allocator& ) const noexcept
+                {
+                    return false;
+                }
+
+            public:
                 static void
                 intitialize(
                     std::size_t a_size
@@ -71,7 +83,8 @@ struct linear_allocator
                     }
 
                     m_start = static_cast<T*>(
-                        memory::arena_allocator<>::singleton::get_instance()
+                        memory::arena_allocator<
+                            ArenaTag>::singleton::get_instance()
                             .allocate( a_size * sizeof( T ) )
                     );
                     m_size = a_size * sizeof( T );
@@ -107,7 +120,16 @@ struct linear_allocator
 
                     if( m_used + padding + allocation_size > m_size )
                     {
-                        throw std::bad_alloc{};
+                        throw error::alloc_fail( std::format(
+                            "Linear allocator out of memory. "
+                            "Requested {} bytes, but only {} bytes "
+                            "remain. Total size is {} bytes. Allocator Type: "
+                            "{}",
+                            allocation_size,
+                            m_size - m_used,
+                            m_size,
+                            typeid( T ).name()
+                        ) );
                     }
 
                     T* allocated_memory  = m_start + m_used + padding;

@@ -113,7 +113,7 @@ TEST_CASE(
     // Multiple errors.
     CHECK( result.error().size() == 3 );
 
-    auto perform_assertions = []( const luyamlman::error::s_error& a_error,
+    auto perform_assertions = []( const luyamlman::error::s_error<>& a_error,
                                   uint32_t                        a_line_number,
                                   luyamlman::types::t_plugin_name a_plugin_name,
                                   s_load_order_read_error::e_code a_code )

@@ -30,23 +30,28 @@ luyamlman::raii::s_application_global_allocator_handler::
     ~s_application_global_allocator_handler() noexcept
 {
     luyamlman::memory::linear_allocator<
+        luyamlman::tags::s_default,
         luyamlman::tags::s_load_order_strings,
         memory::e_usage::multiple>::allocator<char>::reset_allocator();
 
     luyamlman::memory::linear_allocator<
+        luyamlman::tags::s_default,
         tags::s_load_order_strings,
         memory::e_usage::single>::allocator<char>::reset_allocator();
 
     luyamlman::memory::linear_allocator<
+        luyamlman::tags::s_default,
         luyamlman::tags::s_load_order_history_strings,
         memory::e_usage::multiple>::allocator<char>::reset_allocator();
 
     luyamlman::memory::linear_allocator<
+        luyamlman::tags::s_default,
         luyamlman::tags::s_load_order_vector,
         memory::e_usage::multiple>::allocator<types::t_plugin_name>::
         reset_allocator();
 
     luyamlman::memory::linear_allocator<
+        luyamlman::tags::s_default,
         luyamlman::tags::s_load_order_history_vector,
         memory::e_usage::multiple>::allocator<types::t_plugin_name>::
         reset_allocator();

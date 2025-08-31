@@ -19,22 +19,27 @@ along with LOOT Userlist.yaml Manager.  If not, see
 <http://www.gnu.org/licenses/>.
 */
 
-////////////////////////////////////////////////////////////////////////////////
-// STANDARD LIBRARY INCLUDES
-////////////////////////////////////////////////////////////////////////////////
-#include <compare>
+#include <memory>
+#include <type_traits>
 
-namespace luyamlman::error_details_types {
+namespace luyamlman::raii {
 
-struct s_allocation_failure
+template <class T, template <class> class AAllocatorType = std::allocator>
+class s_allocator_context
 {
-        bool
-        operator!=( const s_allocation_failure& ) const noexcept
-            = default;
 
-        std::partial_ordering
-        operator<=>( const s_allocation_failure& ) const noexcept
-            = default;
+    public:
+        ~s_allocator_context() noexcept
+        {
+            if constexpr( std::is_same_v<AAllocatorType<T>, std::allocator<T>> )
+            {
+                return;
+            }
+            else
+            {
+                AAllocatorType<T>::reset_used();
+            }
+        }
 };
 
-} // namespace luyamlman::error_details_types
+} // namespace luyamlman::raii

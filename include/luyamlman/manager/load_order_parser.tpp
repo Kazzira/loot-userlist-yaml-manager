@@ -36,15 +36,21 @@ along with LOOT Userlist.yaml Manager.  If not, see
 #include "luyamlman/error/details_types/s_load_order_read_error.hpp"
 #include "luyamlman/error/s_error.hpp"
 #include "luyamlman/manager/load_order_parser.hpp"
+#include "luyamlman/raii/s_allocator_context.hpp"
+#include "luyamlman/types/std_internals.hpp"
 #include "luyamlman/types/t_plugin_name.hpp"
 
 template <
     template <class> typename AVectorAllocator,
     template <class> typename ACharAllocator,
-    template <class> typename ATempStringCharAllocator>
-luyamlman::result<std::vector<
-    luyamlman::types::t_plugin_name,
-    AVectorAllocator<luyamlman::types::t_plugin_name>>>
+    template <class> typename ATempStringCharAllocator,
+    template <class> typename AStringViewSetAllocator,
+    template <class> typename AErrorListAllocator>
+luyamlman::result<
+    std::vector<
+        luyamlman::types::t_plugin_name,
+        AVectorAllocator<luyamlman::types::t_plugin_name>>,
+    AErrorListAllocator>
 luyamlman::manager::parse_load_order_file(
     std::string_view a_load_order_file_path
 )
@@ -62,21 +68,26 @@ luyamlman::manager::parse_load_order_file(
     using luyamlman::error_details_types::s_load_order_read_error;
     using luyamlman::types::t_plugin_name;
 
+    using set_allocator_type
+        = AStringViewSetAllocator<luyamlman::types::t_plugin_name>;
+    using set_type = std::set<t_plugin_name, std::less<>, set_allocator_type>;
+
     std::vector<t_plugin_name, AVectorAllocator<t_plugin_name>> parse_vector{};
 
-    result<std::vector<t_plugin_name, AVectorAllocator<t_plugin_name>>>
-                            parse_result{};
+    result<
+        std::vector<t_plugin_name, AVectorAllocator<t_plugin_name>>,
+        AErrorListAllocator>
+                  parse_result{};
 
-    bool                    error_occurred = false;
-    std::set<t_plugin_name> unique_plugins;
-    std::ifstream           load_order_file( a_load_order_file_path.data() );
+    bool          error_occurred = false;
+    std::ifstream load_order_file( a_load_order_file_path.data() );
 
     // Manager-2
     if( !load_order_file.is_open() )
     {
-        parse_result = std::unexpected(
-            s_error( s_filesystem_error{ a_load_order_file_path } )
-        );
+        parse_result = std::unexpected( s_error<AErrorListAllocator>(
+            s_filesystem_error{ a_load_order_file_path }
+        ) );
 
         return parse_result;
     }
@@ -90,6 +101,7 @@ luyamlman::manager::parse_load_order_file(
     auto do_run = [&]<e_action action>() -> uint32_t
     {
         uint32_t line_number = 0;
+        set_type unique_plugins;
 
         while( std::getline( load_order_file, line ) )
         {
@@ -142,18 +154,19 @@ luyamlman::manager::parse_load_order_file(
                 if( !error_occurred )
                 {
                     error_occurred = true;
-                    parse_result
-                        = std::unexpected( s_error( s_load_order_read_error{
-                            .m_code
+                    parse_result   = std::unexpected(
+                        s_error<AErrorListAllocator>( s_load_order_read_error{
+                              .m_code
                             = s_load_order_read_error::e_code::duplicate_plugin,
-                            .m_line_number = line_number,
-                            .m_plugin_name = plugin_name
-                        } ) );
+                              .m_line_number = line_number,
+                              .m_plugin_name = plugin_name
+                        } )
+                    );
                 }
                 else
                 {
                     parse_result.error().insert_additional_error(
-                        s_error( s_load_order_read_error{
+                        s_error<AErrorListAllocator>( s_load_order_read_error{
                             .m_code
                             = s_load_order_read_error::e_code::duplicate_plugin,
                             .m_line_number = line_number,
