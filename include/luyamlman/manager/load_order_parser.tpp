@@ -135,49 +135,52 @@ luyamlman::manager::parse_load_order_file(
             {
                 continue;
             }
-
-            // ALLOCATION TIME
-            ACharAllocator<char> allocator;
-            char* plugin_cstr_without_null = allocator.allocate( line.size() );
-            (void
-            )std::memcpy( plugin_cstr_without_null, line.data(), line.size() );
-
-            t_plugin_name plugin_name{
-                plugin_cstr_without_null,
-                line.size(),
-            };
-
-            // Manager-2
-            // Manager-3
-            if( unique_plugins.find( plugin_name ) != unique_plugins.end() )
+            else
             {
-                if( !error_occurred )
-                {
-                    error_occurred = true;
-                    parse_result   = std::unexpected(
-                        s_error<AErrorListAllocator>( s_load_order_read_error{
-                              .m_code
-                            = s_load_order_read_error::e_code::duplicate_plugin,
-                              .m_line_number = line_number,
-                              .m_plugin_name = plugin_name
-                        } )
-                    );
-                }
-                else
-                {
-                    parse_result.error().insert_additional_error(
-                        s_error<AErrorListAllocator>( s_load_order_read_error{
-                            .m_code
-                            = s_load_order_read_error::e_code::duplicate_plugin,
-                            .m_line_number = line_number,
-                            .m_plugin_name = plugin_name
-                        } )
-                    );
-                }
-            }
 
-            unique_plugins.insert( plugin_name );
-            parse_vector.push_back( plugin_name );
+                // ALLOCATION TIME
+                ACharAllocator<char> allocator;
+                char* plugin_cstr_without_null = allocator.allocate( line.size() );
+                (void
+                )std::memcpy( plugin_cstr_without_null, line.data(), line.size() );
+
+                t_plugin_name plugin_name{
+                    plugin_cstr_without_null,
+                    line.size(),
+                };
+
+                // Manager-2
+                // Manager-3
+                if( unique_plugins.find( plugin_name ) != unique_plugins.end() )
+                {
+                    if( !error_occurred )
+                    {
+                        error_occurred = true;
+                        parse_result   = std::unexpected(
+                            s_error<AErrorListAllocator>( s_load_order_read_error{
+                                .m_code
+                                = s_load_order_read_error::e_code::duplicate_plugin,
+                                .m_line_number = line_number,
+                                .m_plugin_name = plugin_name
+                            } )
+                        );
+                    }
+                    else
+                    {
+                        parse_result.error().insert_additional_error(
+                            s_error<AErrorListAllocator>( s_load_order_read_error{
+                                .m_code
+                                = s_load_order_read_error::e_code::duplicate_plugin,
+                                .m_line_number = line_number,
+                                .m_plugin_name = plugin_name
+                            } )
+                        );
+                    }
+                }
+
+                unique_plugins.insert( plugin_name );
+                parse_vector.push_back( plugin_name );
+            }
         }
 
         return line_number;

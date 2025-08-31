@@ -44,6 +44,8 @@ build/
 compile_commands.json
 Testing/
 .cache/
+.vs/
+.vscode/
 
 # Python....
 .mypy_cache/

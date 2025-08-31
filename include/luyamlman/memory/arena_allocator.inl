@@ -65,7 +65,16 @@ luyamlman::memory::arena_allocator<ATag>::allocate(
 
     if( m_arena_used + a_size + padding > m_arena_size )
     {
-        throw std::bad_alloc{};
+        throw luyamlman::error::alloc_fail(
+            "luyamlman::memory::arena_allocator<ATag>::allocate: Failed to "
+            "allocate memory from arena. Requested size: "
+            + std::to_string( a_size )
+            + " bytes. Arena size: "
+            + std::to_string( m_arena_size )
+            + " bytes. Arena used: "
+            + std::to_string( m_arena_used )
+            + " bytes."
+        );
     }
 
     void* allocated_memory  = m_arena_start + m_arena_used + padding;

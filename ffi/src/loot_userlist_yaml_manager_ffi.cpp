@@ -138,8 +138,6 @@ loot_userlist_yaml_manager_create_handle(
     {
         return LUYAMLMAN_ERR_ALLOCATION_FAILED();
     }
-
-    return LUYAMLMAN_OK();
 }
 
 void

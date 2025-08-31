@@ -42,8 +42,23 @@ using str_allocator = luyamlman::memory::linear_allocator<
     luyamlman::tags::s_test_01,
     luyamlman::memory::e_usage::multiple>::allocator<T>;
 
+#ifdef _WIN32
+constexpr size_t k_str_size = 32;
+#else
+constexpr size_t k_str_size = 21;
+#endif
+
 constexpr size_t k_string_vector_size       = 128;
-constexpr size_t k_character_allocator_size = 21 * 128;
+
+#ifdef _WIN32
+#ifdef NODEBUG
+constexpr size_t k_character_allocator_size = k_str_size * 128;
+#else
+constexpr size_t k_character_allocator_size = 16 * 256;
+#endif
+#else
+constexpr size_t k_character_allocator_size = k_str_size * 128;
+#endif
 
 using fast_string
     = std::basic_string<char, std::char_traits<char>, str_allocator<char>>;
@@ -55,7 +70,8 @@ class s_str_allocator_handler
     public:
         s_str_allocator_handler(
             size_t a_arena_size = k_string_vector_size * sizeof( std::string )
-                                + k_character_allocator_size,
+                                + k_character_allocator_size + k_str_size * 128,
+                                [[maybe_unused]]
             size_t a_str_allocator_char_size   = k_character_allocator_size,
             size_t a_str_allocator_string_size = k_string_vector_size
         )
@@ -65,7 +81,16 @@ class s_str_allocator_handler
             );
             str_allocator<fast_string>::intitialize( a_str_allocator_string_size
             );
+#ifdef _WIN32
+#ifdef NODEBUG
             str_allocator<char>::intitialize( a_str_allocator_char_size );
+#else
+            str_allocator<std::_Container_proxy>::intitialize( k_string_vector_size * 2 );
+            str_allocator<char>::intitialize( k_str_size * 128 );
+#endif
+#else
+            str_allocator<char>::intitialize( a_str_allocator_char_size );
+#endif
         }
 
         ~s_str_allocator_handler()
@@ -88,11 +113,11 @@ TEST_CASE(
     CHECK( str_allocator<fast_string>::used() == sizeof( fast_string ) * 128 );
     CHECK( str_allocator<char>::used() == 0 );
 
-    CHECK( str_allocator<char>::size() == 2688 );
+    CHECK( str_allocator<char>::size() == k_str_size * 128 );
 
     for( size_t i = 0; i < 128; ++i )
     {
         vec.emplace_back( "TWENTY TWENTY TWENTY" );
-        CHECK( str_allocator<char>::used() == 21 * ( i + 1 ) );
+        CHECK( str_allocator<char>::used() == k_str_size * ( i + 1 ) );
     }
 }

@@ -89,14 +89,6 @@ class s_error
         size() const noexcept;
 
     public:
-        bool
-        operator!=( const s_error& ) const noexcept
-            = default;
-
-        std::partial_ordering
-        operator<=>( const s_error& ) const noexcept
-            = default;
-
     public:
         inline const luyamlman::error::v_error_details&
         details() const noexcept;

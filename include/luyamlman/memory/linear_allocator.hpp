@@ -60,6 +60,11 @@ struct linear_allocator
                 using const_reference = const T&;
                 using difference_type = std::ptrdiff_t;
 
+                template <typename U>
+                struct rebind
+                {
+                    using other = allocator<U>;
+                };
             public:
                 allocator() noexcept {}
 
@@ -69,6 +74,16 @@ struct linear_allocator
                     return false;
                 }
 
+                bool operator ==( const allocator& ) const noexcept
+                {
+                    return true;
+                }
+            public:
+            template <typename U>
+                operator allocator<U>() noexcept
+                {
+                    return reinterpret_cast<allocator<U>&>( *this );
+                }
             public:
                 static void
                 intitialize(
@@ -82,7 +97,7 @@ struct linear_allocator
                         };
                     }
 
-                    m_start = static_cast<T*>(
+                    m_start = static_cast<std::byte*>(
                         memory::arena_allocator<
                             ArenaTag>::singleton::get_instance()
                             .allocate( a_size * sizeof( T ) )
@@ -132,7 +147,7 @@ struct linear_allocator
                         ) );
                     }
 
-                    T* allocated_memory  = m_start + m_used + padding;
+                    T* allocated_memory  = reinterpret_cast<T*>(m_start + m_used + padding);
                     m_used              += padding + allocation_size;
                     return allocated_memory;
                 }
@@ -178,8 +193,20 @@ struct linear_allocator
                     m_used  = 0;
                 }
 
+                template <typename U>
+            static void
+                same_as() noexcept
+            {
+                    allocator<U>::m_start = allocator<T>::m_start;
+					allocator<U>::m_size  = allocator<T>::m_size;
+                    allocator<U>::m_used  = allocator<U>::m_used;
+            }
+
             private:
-                inline static T*          m_start{ nullptr };
+				template <typename U>
+                friend class allocator;
+
+                inline static std::byte*  m_start { nullptr };
                 inline static std::size_t m_size{ 0 };
                 inline static std::size_t m_used{ 0 };
         };

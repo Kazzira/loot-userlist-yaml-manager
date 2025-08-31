@@ -38,7 +38,7 @@ TEST_CASE(
     using luyamlman::error::v_error_details;
     using luyamlman::error_details_types::s_allocation_failure;
 
-    s_error error( v_error_details{ s_allocation_failure{} } );
+    s_error<> error( v_error_details{ s_allocation_failure{} } );
 
     REQUIRE( error.size() == 1 );
     error.consolidate_errors();
@@ -57,7 +57,7 @@ TEST_CASE(
     using luyamlman::error_details_types::s_allocation_failure;
     using luyamlman::error_details_types::s_load_order_read_error;
 
-    s_error error( v_error_details{
+    s_error<> error( v_error_details{
         s_load_order_read_error{
                                 .m_code        = s_load_order_read_error::e_code::duplicate_plugin,
                                 .m_line_number = 42,
@@ -65,7 +65,7 @@ TEST_CASE(
         }
     } );
 
-    s_error nested_error( v_error_details{
+    s_error<> nested_error( v_error_details{
         s_load_order_read_error{
                                 .m_code        = s_load_order_read_error::e_code::duplicate_plugin,
                                 .m_line_number = 43,
@@ -73,14 +73,14 @@ TEST_CASE(
         }
     } );
 
-    nested_error.insert_additional_error( s_error( v_error_details{
+    nested_error.insert_additional_error( s_error<>( v_error_details{
         s_load_order_read_error{
                                 .m_code        = s_load_order_read_error::e_code::duplicate_plugin,
                                 .m_line_number = 44,
                                 .m_plugin_name = "Fun3.esp"_esp
         }
     } ) );
-    nested_error.insert_additional_error( s_error( v_error_details{
+    nested_error.insert_additional_error( s_error<>( v_error_details{
         s_load_order_read_error{
                                 .m_code        = s_load_order_read_error::e_code::duplicate_plugin,
                                 .m_line_number = 45,
@@ -88,7 +88,7 @@ TEST_CASE(
         }
     } ) );
 
-    error.insert_additional_error( s_error( v_error_details{
+    error.insert_additional_error( s_error<>( v_error_details{
         s_load_order_read_error{
                                 .m_code        = s_load_order_read_error::e_code::duplicate_plugin,
                                 .m_line_number = 46,
